@@ -1,0 +1,22 @@
+fileFormatVersion: 2
+guid: fff8dd8350b334829a2d97818079359f
+TrueTypeFontImporter:
+  externalObjects: {}
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontNames:
+  - Agave Nerd Font
+  fallbackFontReferences:
+  - {fileID: 12800000, guid: 1cbcdf8eedc4c4ceb962153ef0b9e8f1, type: 3}
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  useLegacyBoundsCalculation: 0
+  shouldRoundAdvanceValue: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

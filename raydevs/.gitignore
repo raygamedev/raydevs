@@ -1,0 +1,44 @@
+# =============== #
+# Unity generated #
+# =============== #
+Temp/
+Library/
+UserSettings/
+Build/
+Builds/
+Logs/
+
+# ===================================== #
+# Visual Studio / Rider / MonoDevelop generated #
+# ===================================== #
+ExportedObj/
+.vs/
+/*.userprefs
+/*.csproj
+/*.pidb
+/*.suo
+/*.sln*
+/*.user
+/*.unityproj
+/*.booproj
+/*.bak
+
+# ============ #
+# OS generated #
+# ============ #
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+Icon?
+ehthumbs.db
+DLLDebugLog.dll
+Thumbs.db
+
+# =============== #
+# File types to include #
+# =============== #
+!*.dll
+!*.asmdef
+
