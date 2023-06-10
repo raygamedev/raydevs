@@ -10,7 +10,7 @@
 
 # production
 /build
-/pubic/build
+/public/build
 /target
 
 # misc
