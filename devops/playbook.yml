@@ -46,6 +46,11 @@
         - install
     - name: Update server
       block:
+        - name: Tag Docker image
+          docker_image:
+            name: ghcr.io/raygamedev/raydevsrs:latest
+            repository: ghcr.io/raygamedev/raydevsrs
+            tag: backup
         - name: Close docker service
           community.general.docker_compose:
             project_src: /root
@@ -57,3 +62,26 @@
             state: present
       tags:
         - update
+    - name: Revert server
+      block:
+        - name: Tag Docker image
+          docker_image:
+            name: ghcr.io/raygamedev/raydevsrs:latest
+            repository: ghcr.io/raygamedev/raydevsrs
+            tag: failed
+        - name: Close docker service
+          community.general.docker_compose:
+            project_src: /root
+            state: absent
+        - name: Tag Docker image
+          docker_image:
+            name: ghcr.io/raygamedev/raydevsrs:backup
+            repository: ghcr.io/raygamedev/raydevsrs
+            tag: latest
+        - name: Pull and run docker service
+          community.general.docker_compose:
+            pull: true
+            project_src: /root
+            state: present
+      tags:
+        - revert

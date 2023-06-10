@@ -11,8 +11,8 @@ namespace Raydevs.VFX
         [Header("Stats")]
         [SerializeField] private int damage;
         [SerializeField] private float knockback;
-        [SerializeField] private float colliderRadiusTime = 1.0f;
-        [SerializeField] private float maxColliderRadius = 2.4f;
+        [SerializeField] private float colliderRadiusTime;
+        [SerializeField] private float maxColliderRadius;
 
         [Header("Components")]
         [SerializeField] private Animator animator;
@@ -39,9 +39,9 @@ namespace Raydevs.VFX
         private void OnTriggerEnter2D(Collider2D col)
         {
             if (!col.gameObject.CompareTag("Enemy")) return;
-
+            int randomDamage = UnityEngine.Random.Range(damage - 5, damage + 25);
             impactHandler.HandleEnemyImpact(enemyController: col.GetComponent<EnemyController>(),
-                damage,
+                randomDamage,
                 knockback,
                 false);
         }

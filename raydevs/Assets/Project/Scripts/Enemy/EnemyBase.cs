@@ -30,9 +30,10 @@ namespace Enemy
         }
 
         private void InstantiateDamageText()
+
         {
-            GameObject go = Instantiate(damageText, transform.position, Quaternion.identity, gameObject.transform);
-            go.GetComponent<TextMeshPro>().text = _damage.ToString();
+            // GameObject go = Instantiate(damageText, transform.position, Quaternion.identity, gameObject.transform);
+            // go.GetComponent<TextMeshPro>().text = _damage.ToString();
         }
 
 
