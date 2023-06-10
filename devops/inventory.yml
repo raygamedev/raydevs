@@ -1,0 +1,6 @@
+server:
+  hosts:
+    raydevs.com:
+      ansible_host: ec2-34-222-225-11.us-west-2.compute.amazonaws.com
+      ansible_user: ubuntu
+

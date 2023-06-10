@@ -1,0 +1,30 @@
+version: "3"
+services:
+  install:
+      platform: linux/amd64
+      build:
+        context: .
+        dockerfile: Dockerfile
+      image: ghcr.io/raygamedev/raydevs:devops
+      command: /bin/bash -c "cd /root && ansible-playbook -i /root/inventory.yml /root/playbook.yml --tags install"
+      volumes:
+        - /var/run/docker.sock:/var/run/docker.sock
+        - /Users/ray/.ssh/amazon_raydevs.pem:/root/.ssh/aws.pem
+      environment:
+        - AWS_SERVER_HOST
+        - AWS_SERVER_USER
+        - AWS_SECRET
+  update:
+    platform: linux/amd64
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: ghcr.io/raygamedev/raydevs:devops
+    command: /bin/bash -c "cd /root && ansible-playbook -i /root/inventory.yml /root/playbook.yml  --tags update"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /Users/ray/.ssh/amazon_raydevs.pem:/root/.ssh/aws.pem
+    environment:
+      - AWS_SERVER_HOST
+      - AWS_SERVER_USER
+      - AWS_SECRET
