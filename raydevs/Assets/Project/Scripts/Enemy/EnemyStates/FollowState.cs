@@ -1,8 +1,7 @@
-using System.Collections;
-using UnityEngine;
-
-namespace Raydevs.Enemy.EnemyStateMachine.EnemyStates
+namespace Raydevs.Enemy.EnemyStates
 {
+    using System.Collections;
+    using UnityEngine;
     public class FollowState: EnemyBaseState
     {
         private const float FollowPlayerTimer = 3f;

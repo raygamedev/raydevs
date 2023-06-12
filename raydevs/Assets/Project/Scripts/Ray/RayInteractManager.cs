@@ -1,5 +1,5 @@
 
-namespace Raydevs
+namespace Raydevs.Ray
 {
     using UnityEngine;
     using UnityEngine.InputSystem;

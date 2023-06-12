@@ -1,11 +1,10 @@
-using System;
-using System.Collections;
-using UnityEngine;
-using TMPro;
-using Random = UnityEngine.Random;
 
 namespace Raydevs.VFX
 {
+    using System.Collections;
+    using UnityEngine;
+    using TMPro;
+    using Random = UnityEngine.Random;
     public class DamageText : MonoBehaviour
     {
         [SerializeField] private TextMeshPro _textMeshPro;

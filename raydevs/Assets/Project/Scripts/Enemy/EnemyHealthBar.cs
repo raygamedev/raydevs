@@ -1,9 +1,8 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
-namespace Project.Scripts.Enemy
+namespace Raydevs.Enemy
 {
+    using System.Collections;
+    using System.Collections.Generic;
+    using UnityEngine;
     public class EnemyHealthBar: MonoBehaviour
     {
         private const float HealthBarMaxScale = 11.61f;

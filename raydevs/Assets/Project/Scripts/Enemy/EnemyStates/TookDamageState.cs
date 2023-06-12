@@ -1,4 +1,4 @@
-namespace Raydevs.Enemy.EnemyStateMachine.EnemyStates
+namespace Raydevs.Enemy.EnemyStates
 {
     public class TookDamageState: EnemyBaseState
     {

@@ -1,9 +1,8 @@
-using System.Collections;
-using UnityEngine;
 
 namespace Raydevs.Utils
 {
-
+    using System.Collections;
+    using UnityEngine;
     public class EnemySpawner : MonoBehaviour
     {
         [SerializeField] private bool _spawnOnStart;

@@ -1,13 +1,9 @@
-using System;
-using System.Collections;
-using Project.Scripts.Enemy;
-using UnityEditor;
-using UnityEngine;
-using UnityEngine.Serialization;
-
-namespace Raydevs.Enemy.EnemyStateMachine
+namespace Raydevs.Enemy
 {
-    public class EnemyController : MonoBehaviour
+    using Interfaces;
+    using System.Collections;
+    using UnityEngine;
+    public class EnemyController : MonoBehaviour, IDamageable
     {
         [SerializeField] public float AlertDistance = 3f;
         [SerializeField] public float AttackDistance = 1f;

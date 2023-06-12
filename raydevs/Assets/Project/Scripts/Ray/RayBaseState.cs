@@ -1,4 +1,4 @@
-namespace Raydevs.RayStateMachine
+namespace Raydevs.Ray
 {
     public abstract class RayBaseState
     {

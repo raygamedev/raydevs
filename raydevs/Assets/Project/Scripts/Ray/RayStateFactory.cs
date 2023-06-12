@@ -1,7 +1,7 @@
-using Project.Scripts.RayStateMachine.CombatStates;
-
-namespace Raydevs.RayStateMachine
+namespace Raydevs.Ray
 {
+    using CombatStates;
+    using MovementStates;
     public class RayStateFactory
     {
         private readonly RayStateMachine _context;

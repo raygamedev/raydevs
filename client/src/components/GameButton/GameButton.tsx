@@ -89,6 +89,9 @@ const GameButton = ({ isPlaying, onClick, isLoaded }: GameButtonProps) => {
   if (!isLoaded) {
     return (
       <Button
+        data-testid={'raydevs-game-button'}
+        data-is-game-loaded={isLoaded}
+        data-is-game-playing={isPlaying}
         disabled={!isLoaded}
         onClick={() => onClick(!isPlaying)}
         className={classes.root}
@@ -101,6 +104,8 @@ const GameButton = ({ isPlaying, onClick, isLoaded }: GameButtonProps) => {
   if (isPlaying) {
     return (
       <Button
+        data-testid={'raydevs-game-button'}
+        data-is-game-playing={isPlaying}
         disabled={isPlaying && isMobile}
         onClick={() => onClick(!isPlaying)}
         className={classes.root}
@@ -113,6 +118,9 @@ const GameButton = ({ isPlaying, onClick, isLoaded }: GameButtonProps) => {
   }
   return (
     <Button
+      data-testid={'raydevs-game-button'}
+      data-is-game-loaded={isLoaded}
+      data-is-game-playing={isPlaying}
       disabled={isPlaying && isMobile}
       onClick={() => onClick(!isPlaying)}
       className={classes.root}

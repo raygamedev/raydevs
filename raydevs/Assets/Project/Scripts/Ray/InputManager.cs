@@ -1,11 +1,11 @@
 using System;
 using UnityEngine.InputSystem;
 
-namespace Raydevs
+namespace Raydevs.Ray
 {
     public static class InputManager
     {
-        private static RayInput _rayInput;
+        private static readonly RayInput _rayInput;
 
         static InputManager()
         {

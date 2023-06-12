@@ -1,11 +1,9 @@
-// EnemySpawnerEditor.cs
-
-using Raydevs.Utils;
-using UnityEditor;
-using UnityEngine;
-
-namespace Project.Scripts.Editor
+namespace Raydevs.Editor
 {
+    using Utils;
+    using UnityEditor;
+    using UnityEngine;
+
     [CustomEditor(typeof(EnemySpawner))]
     public class EnemySpawnerEditor : UnityEditor.Editor
     {

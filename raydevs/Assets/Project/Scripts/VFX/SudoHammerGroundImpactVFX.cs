@@ -1,11 +1,8 @@
-using System;
-using System.Collections;
-using Project.Scripts.Ray;
-using Raydevs.Enemy.EnemyStateMachine;
-using UnityEngine;
-
 namespace Raydevs.VFX
 {
+    using Ray;
+    using UnityEngine;
+    using Enemy;
     public class SudoHammerGroundImpactVFX: MonoBehaviour
     {
         [Header("Stats")]
@@ -40,7 +37,7 @@ namespace Raydevs.VFX
         {
             if (!col.gameObject.CompareTag("Enemy")) return;
             int randomDamage = UnityEngine.Random.Range(damage - 5, damage + 25);
-            impactHandler.HandleEnemyImpact(enemyController: col.GetComponent<EnemyController>(),
+            impactHandler.HandleEnemyImpact(col,
                 randomDamage,
                 knockback,
                 false);

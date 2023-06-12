@@ -1,4 +1,4 @@
-namespace Raydevs.RayStateMachine
+namespace Raydevs.Ray.MovementStates
 {
     public class RayGroundedState : RayBaseState
     {

@@ -1,7 +1,6 @@
-using Raydevs.Enemy.EnemyStateMachine.EnemyStates;
-
-namespace Raydevs.Enemy.EnemyStateMachine
+namespace Raydevs.Enemy
 {
+    using EnemyStates;
     public class EnemyStateFactory
     {
         private readonly EnemyController _context;
@@ -10,7 +9,6 @@ namespace Raydevs.Enemy.EnemyStateMachine
         {
             _context = currentContext;
         }
-
         public EnemyBaseState Patrol() => new PatrolState(_context, this);
         
         public EnemyBaseState Follow() => new FollowState(_context, this);

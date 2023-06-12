@@ -5,11 +5,11 @@
 
 @font-face {
   font-family: "roboto_bold";
-  src: url("./roboto_mono_bold.ttf");
+  src: url("./roboto_mono_bold.ttf") format("truetype");
 }
 @font-face {
   font-family: "roboto";
-  src: url("./roboto_mono.ttf");
+  src: url("./roboto_mono.ttf")  format("truetype");
 }
 
 @font-face {

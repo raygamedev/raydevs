@@ -7,7 +7,7 @@ services:
       dockerfile: raydevs.Dockerfile
     ports:
       - "3000:3000"
-    image: ghcr.io/raygamedev/raydevsrs:latest
+    image: ghcr.io/raygamedev/raydevs:latest
     command: /app/server
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock

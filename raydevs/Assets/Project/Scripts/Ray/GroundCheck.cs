@@ -1,9 +1,6 @@
-using Project.Scripts.RayStateMachine;
-
-namespace Raydevs
+namespace Raydevs.Ray
 {
     using UnityEngine;
-
     public class GroundCheck : MonoBehaviour
     {
         private RayMovementManager _rayMovementManager;

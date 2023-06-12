@@ -1,11 +1,4 @@
 # Build the React app
-FROM node:18 AS react-build
-WORKDIR /app
-COPY client/package*.json ./
-RUN npm install
-COPY client/ ./
-RUN npm run build
-
 # Build the Rust server
 FROM rust:1.69 AS rust-build
 WORKDIR /app
@@ -16,7 +9,15 @@ RUN mkdir -p src && \
     cargo build --release && \
     rm -rf src
 COPY server/ ./
+
 RUN cargo install --path .
+FROM node:18 AS react-build
+WORKDIR /app
+COPY client/package*.json ./
+RUN npm install
+COPY client/ ./
+RUN npm run build
+
 
 # Combine the React app and Rust server into the final image
 FROM debian:buster-slim

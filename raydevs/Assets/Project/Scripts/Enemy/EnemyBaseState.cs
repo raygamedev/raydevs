@@ -1,4 +1,4 @@
-namespace Raydevs.Enemy.EnemyStateMachine
+namespace Raydevs.Enemy
 {
     public abstract class EnemyBaseState
     {

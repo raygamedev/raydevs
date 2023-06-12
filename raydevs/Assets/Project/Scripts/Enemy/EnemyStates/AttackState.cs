@@ -1,7 +1,7 @@
-using UnityEngine;
 
-namespace Raydevs.Enemy.EnemyStateMachine.EnemyStates
+namespace Raydevs.Enemy.EnemyStates
 {
+    using UnityEngine;
     public class AttackState: EnemyBaseState
     {
         private bool _isAnimFinished;

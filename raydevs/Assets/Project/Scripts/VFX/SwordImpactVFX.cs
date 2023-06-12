@@ -1,7 +1,6 @@
-using UnityEngine;
-
 namespace Raydevs.VFX
 {
+    using UnityEngine;
     public class SwordImpactVFX: MonoBehaviour
     {
         [SerializeField] private Animator animator;

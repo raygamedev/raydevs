@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Raydevs.RayStateMachine
+namespace Raydevs.Ray.MovementStates
 {
     public class RayFallState: RayBaseState
     {

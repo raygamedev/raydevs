@@ -1,8 +1,8 @@
-using UnityEngine;
-using UnityEngine.InputSystem;
 
-namespace Raydevs
+namespace Raydevs.Ray
 {
+    using UnityEngine;
+    using UnityEngine.InputSystem;
     public class RayMovementManager: MonoBehaviour
     {
         [SerializeField] private Rigidbody2D _rigidbody;

@@ -3,6 +3,7 @@ WORKDIR /app
 COPY ./package.json ./package-lock.json ./
 RUN npm install
 COPY . /app
+RUN npm run ci-test
 RUN npm run build
 
 FROM node:18-alpine

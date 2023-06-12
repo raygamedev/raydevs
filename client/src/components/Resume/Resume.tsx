@@ -1,24 +1,24 @@
-import { Unity, useUnityContext } from 'react-unity-webgl';
 import { motion } from 'framer-motion';
 import {
-  Flex,
-  createStyles,
-  SegmentedControlItem,
-  Box,
-  NavLink,
   Avatar,
-  Text,
+  Box,
+  createStyles,
+  Flex,
   Group,
+  NavLink,
+  SegmentedControlItem,
+  Text,
 } from '@mantine/core';
 import { SegmentControl } from './SegmentControl';
 import { SegmentItem } from './SegmentItem';
 import InspektoLogo from '../../art/InspektoLogo.png';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { ResumeCardType } from './enums';
 import { ResumeData, ResumeKeys } from './types';
 import { SegmentDescription } from './SegmentDescription';
 import Summary from './Summary';
 import useIsMobile from '../../hooks/useIsMobile';
+import { RaydevsGame } from '../RaydevsGame/RaydevsGame';
 
 const resumeData: ResumeData = {
   [ResumeKeys.SoftwareDeveloper]: {
@@ -155,21 +155,13 @@ interface ResumeProps {
   isPlaying: boolean;
   setIsGameLoaded: (isLoaded: boolean) => void;
 }
+
 export const Resume = ({ isPlaying, setIsGameLoaded }: ResumeProps) => {
   const isMobile = useIsMobile();
   const { classes } = useStyles();
   const [active, setActive] = useState<ResumeCardType>(
     ResumeCardType.SoftwareDeveloper,
   );
-
-  const { unityProvider, isLoaded } = useUnityContext({
-    loaderUrl: 'build/package.loader.js',
-    dataUrl: 'build/package.data',
-    frameworkUrl: 'build/package.framework.js',
-    codeUrl: 'build/package.wasm',
-  });
-
-  useEffect(() => setIsGameLoaded(isLoaded), [setIsGameLoaded, isLoaded]);
 
   const extractSegmentItems = (
     resumeData: ResumeData,
@@ -221,30 +213,7 @@ export const Resume = ({ isPlaying, setIsGameLoaded }: ResumeProps) => {
     </>
   ) : (
     <Flex className={classes.root}>
-      <motion.div
-        hidden={!isPlaying}
-        transition={{ type: 'spring', duration: 0.8 }}
-        animate={{
-          x: 0,
-          y: isPlaying ? 0 : 2000,
-          opacity: isPlaying ? 1 : 0,
-          rotate: 0,
-        }}
-        style={{
-          position: 'absolute',
-          width: '100%',
-          height: '100%',
-          borderRadius: '15px',
-        }}>
-        <Unity
-          style={{
-            width: '100%',
-            height: '100%',
-            borderRadius: '15px',
-          }}
-          unityProvider={unityProvider}
-        />
-      </motion.div>
+      <RaydevsGame isPlaying={isPlaying} setIsGameLoaded={setIsGameLoaded} />
       <motion.div
         animate={{
           x: 0,

@@ -1,15 +1,9 @@
-using System;
-using System.Collections;
-using Project.Scripts.Ray;
-using Raydevs.Enemy.EnemyStateMachine;
-using Raydevs.VFX;
-using UnityEngine;
-using UnityEngine.InputSystem;
-using UnityEngine.Serialization;
-using Random = UnityEngine.Random;
-
-namespace Raydevs
+namespace Raydevs.Ray
 {
+    using System.Collections;
+    using UnityEngine;
+    using UnityEngine.InputSystem;
+    using Random = UnityEngine.Random;
     public class RayCombatManager: MonoBehaviour
     {
         [Header("Developer Settings")]
@@ -36,9 +30,7 @@ namespace Raydevs
         [SerializeField] public Transform SudoAttackEnemyPoint;
 
         [Header("Prefabs")]
-        [SerializeField] private GameObject swordImpactVFX;
         [SerializeField] private GameObject sudoHammerImpactVFX;
-        [SerializeField] private GameObject damageText;
 
         [Header("Layers")]
         [SerializeField] private LayerMask _enemyLayer;
@@ -59,7 +51,7 @@ namespace Raydevs
         private Collider2D[] _swordAttackHits;
         private Collider2D[] _sudoHammerAttackHits;
 
-        public bool HasSword { get; set; } = false;
+        public bool HasSword { get; set; }
         public bool HasSudoHammer { get; set; } = true;
         public bool HasReactThrowable { get; set; } = true;
         
@@ -189,17 +181,14 @@ namespace Raydevs
             // Using OverlapCircleNonAlloc to efficiently query for enemy collisions in a circular area,
             // populating a pre-allocated array with the results to minimize garbage collection and improve performance
             // _swordAttackHits is a pre-allocated array of size MAX_ENEMY_SWORD_HITS
-            Physics2D.OverlapCircleNonAlloc(SwordAttackPoint.position, SwordAttackRange, _swordAttackHits, _enemyLayer);
-            for (int i = 0; i < MAX_ENEMY_SWORD_HITS; i++)
+            int numHits = Physics2D.OverlapCircleNonAlloc(SwordAttackPoint.position, SwordAttackRange, _swordAttackHits, _enemyLayer);
+            for (int i = 0; i < numHits; i++)
             {
-                if(_swordAttackHits[i] == null) continue;
-                EnemyController enemyController = _swordAttackHits[i].GetComponent<EnemyController>();
-                if(enemyController.IsDead) continue;
                 int randomDamage = (int) Random.Range(LightAttackDamage, 65f);
                 bool isCriticalHit = IsCriticalHit();
                 if(isCriticalHit)
                     randomDamage *= 2;
-                _impactHandler.HandleEnemyImpact(enemyController, randomDamage, knockBackForce, isCriticalHit);
+                _impactHandler.HandleEnemyImpact(_swordAttackHits[i], randomDamage, knockBackForce, isCriticalHit);
 
                 // Reset the collider to null to avoid hitting the same enemy twice
                 _swordAttackHits[i] = null;
@@ -215,7 +204,7 @@ namespace Raydevs
 
             if(hit.collider != null)
             {
-                GameObject go = Instantiate(sudoHammerImpactVFX, hit.point, Quaternion.identity);
+                Instantiate(sudoHammerImpactVFX, hit.point, Quaternion.identity);
                 // do something with pointOfContact
             }
 
@@ -226,11 +215,9 @@ namespace Raydevs
             for (int i = 0; i < MAX_ENEMY_SUDO_HAMMER_HITS; i++)
             {
                 if (_sudoHammerAttackHits[i] == null) continue;
-                EnemyController enemyController = _sudoHammerAttackHits[i].GetComponent<EnemyController>();
-                if(enemyController.IsDead) continue;
                 int randomDamage = (int) Random.Range(LightAttackDamage, 65f);
                 // Reset the collider to null to avoid hitting the same enemy twice
-                _impactHandler.HandleEnemyImpact(enemyController, randomDamage, knockBackForce, false);
+                _impactHandler.HandleEnemyImpact(_sudoHammerAttackHits[i], randomDamage, knockBackForce, false);
                 _sudoHammerAttackHits[i] = null;
             }
 
@@ -241,10 +228,8 @@ namespace Raydevs
         {
             Collider2D enemy = Physics2D.OverlapCircle(PunchAttackPoint.position, PunchAttackRange, _enemyLayer);
             if(enemy == null) return;
-            EnemyController enemyController = enemy.GetComponent<EnemyController>();
-            if(enemyController.IsDead) return;
             int randomDamage = (int) Random.Range(LightAttackDamage, 65f);
-            _impactHandler.HandleEnemyImpact(enemyController, randomDamage, knockBackForce, false);
+            _impactHandler.HandleEnemyImpact(enemy, randomDamage, knockBackForce, false);
 
         }
 

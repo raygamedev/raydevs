@@ -1,7 +1,7 @@
-using UnityEngine;
 
-namespace Raydevs.RayStateMachine
+namespace Raydevs.Ray.MovementStates
 {
+    using UnityEngine;
     public class RayJumpState : RayBaseState
     {
         private bool _isAirborneAnimationPlayed;

@@ -1,25 +1,23 @@
-using Raydevs.RayStateMachine;
-
-namespace Project.Scripts.RayStateMachine.CombatStates
+namespace Raydevs.Ray.CombatStates
 {
     public class RayRangedAttackState: RayBaseState
     {
-        public RayRangedAttackState(Raydevs.RayStateMachine.RayStateMachine currentContext, RayStateFactory stateFactory) : base(currentContext, stateFactory)
+        public RayRangedAttackState(RayStateMachine currentContext, RayStateFactory stateFactory) : base(currentContext, stateFactory)
         {
         }
 
-        public override void EnterState(Raydevs.RayStateMachine.RayStateMachine currentContext, RayStateFactory stateFactory)
+        public override void EnterState(RayStateMachine currentContext, RayStateFactory stateFactory)
         {
             ctx.MovementManager.IsAbleToMove = false;   
             ctx.RayAnimator.Play("ReactAttack");
         }
 
-        public override void UpdateState(Raydevs.RayStateMachine.RayStateMachine currentContext, RayStateFactory stateFactory)
+        public override void UpdateState(RayStateMachine currentContext, RayStateFactory stateFactory)
         {
             CheckSwitchState();
         }
 
-        public override void ExitState(Raydevs.RayStateMachine.RayStateMachine currentContext, RayStateFactory stateFactory)
+        public override void ExitState(RayStateMachine currentContext, RayStateFactory stateFactory)
         {
             ctx.CombatManager.IsAnimationEnded = false;
         }

@@ -1,9 +1,6 @@
-using Project.Scripts.RayStateMachine;
-
-namespace Raydevs.RayStateMachine
+namespace Raydevs.Ray
 {
     using UnityEngine;
-
     public class RayStateMachine : MonoBehaviour
     {
         [SerializeField] public RayMovementManager MovementManager;
