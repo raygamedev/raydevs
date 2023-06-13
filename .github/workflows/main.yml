@@ -77,8 +77,8 @@ jobs:
       working-directory: client
         
 
-  deploy:
-    name: Deploy raydevs.com
+  build-docker:
+    name: build raydevs.com docker image
     needs: build
     runs-on: ubuntu-latest
     steps:
@@ -116,4 +116,25 @@ jobs:
           context: .
           file: ./raydevs.Dockerfile
           push: true
-          tags: ghcr.io/${{ github.repository_owner }}/raydevs:latest # change `app` to your image name
+          tags: ghcr.io/${{ github.repository_owner }}/raydevs:latest
+  deploy:
+    name: Deploy Raydevs
+    needs: [build-docker, test]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Fake deploy
+        run: |
+          echo "Deploying to production..."
+      
+
+#      - name: Build the Docker image
+#        run: docker build . --file Dockerfile --tag
+#
+#      - name: Run the Docker container
+#        run: docker run -d --name my-container my-image
+#
+#      - name: Execute commands inside Docker container
+#        run: docker exec my-container some-command

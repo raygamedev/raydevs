@@ -18,3 +18,5 @@ RUN pip3 install --upgrade pip \
     python3 -m pip install ansible;
 
 COPY . /root
+
+CMD ["/usr/local/bin/ansible-playbook -i /root/inventory.yml /root/playbook.yml  --tags update'"]
