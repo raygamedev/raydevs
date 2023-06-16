@@ -1,0 +1,18 @@
+@font-face {
+  font-family: "retro";
+  src: url("./retro_computer.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "roboto_bold";
+  src: url("./roboto_mono_bold.ttf") format("truetype");
+}
+@font-face {
+  font-family: "roboto";
+  src: url("./roboto_mono.ttf")  format("truetype");
+}
+
+@font-face {
+  font-family: "JetbrainsMonoLight";
+  src: url("./JetBrainsMono-Light.woff2");
+}
