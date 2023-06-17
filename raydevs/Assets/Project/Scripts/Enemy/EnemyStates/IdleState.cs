@@ -13,7 +13,7 @@ namespace Raydevs.Enemy.EnemyStates
         public override void EnterState(EnemyController currentContext, EnemyStateFactory stateFactory)
         {
             ctx.IsRunning = false;
-            ctx.rigidbody.velocity = Vector2.zero;
+            ctx.Rigidbody.velocity = Vector2.zero;
             ctx.animator.Play("Idle");
             ctx.StartCoroutine(StopIdle());
         }

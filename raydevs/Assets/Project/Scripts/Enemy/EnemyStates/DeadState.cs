@@ -14,7 +14,7 @@ namespace Raydevs.Enemy.EnemyStates
         public override void EnterState(EnemyController currentContext, EnemyStateFactory stateFactory)
         {
             renderer = ctx.GetComponent<Renderer>();
-            ctx.rigidbody.constraints = RigidbodyConstraints2D.FreezeAll;
+            ctx.Rigidbody.constraints = RigidbodyConstraints2D.FreezeAll;
             ctx.animator.Play("Die");
             Die();
         }

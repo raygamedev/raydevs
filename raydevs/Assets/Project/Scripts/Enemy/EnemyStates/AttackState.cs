@@ -1,18 +1,20 @@
-
 namespace Raydevs.Enemy.EnemyStates
 {
     using UnityEngine;
-    public class AttackState: EnemyBaseState
+
+    public class AttackState : EnemyBaseState
     {
         private bool _isAnimFinished;
-        public AttackState(EnemyController currentContext, EnemyStateFactory stateFactory) : base(currentContext, stateFactory)
+
+        public AttackState(EnemyController currentContext, EnemyStateFactory stateFactory) : base(currentContext,
+            stateFactory)
         {
         }
 
         public override void EnterState(EnemyController currentContext, EnemyStateFactory stateFactory)
         {
             ctx.IsAbleToMove = false;
-            ctx.rigidbody.velocity = Vector2.zero;
+            ctx.Rigidbody.velocity = Vector2.zero;
             ctx.animator.Play("Attack");
         }
 
@@ -29,9 +31,9 @@ namespace Raydevs.Enemy.EnemyStates
 
         public override void CheckSwitchState()
         {
-            if(ctx.EnemyTookDamage)
+            if (ctx.EnemyTookDamage)
                 SwitchState(state.TookDamage());
-            else if(!ctx.IsInAttackRange && _isAnimFinished)
+            else if (!ctx.IsInAttackRange && _isAnimFinished)
                 SwitchState(state.Follow());
         }
     }

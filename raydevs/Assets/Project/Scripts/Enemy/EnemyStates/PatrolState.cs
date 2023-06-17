@@ -1,4 +1,3 @@
-
 namespace Raydevs.Enemy.EnemyStates
 {
     using System.Collections;

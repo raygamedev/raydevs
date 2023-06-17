@@ -3,26 +3,28 @@ namespace Raydevs.VFX
     using Ray;
     using UnityEngine;
     using Enemy;
-    public class SudoHammerGroundImpactVFX: MonoBehaviour
+    using Raydevs.Interfaces;
+
+    public class SudoHammerGroundImpactVFX : MonoBehaviour
     {
-        [Header("Stats")]
-        [SerializeField] private int damage;
+        [Header("Stats")] [SerializeField] private int damage;
         [SerializeField] private float knockback;
         [SerializeField] private float colliderRadiusTime;
         [SerializeField] private float maxColliderRadius;
 
-        [Header("Components")]
-        [SerializeField] private Animator animator;
+        [Header("Components")] [SerializeField]
+        private Animator animator;
+
         [SerializeField] private ImpactHandler impactHandler;
         [SerializeField] private CircleCollider2D circleCollider;
 
-        private ImpactHandler _impactHandler;
         private float animationTimer;
         private float scale;
 
         private void Start()
         {
-            Destroy(gameObject, animator.GetCurrentAnimatorStateInfo(0).length); // Destroy the game object after the animation is done
+            Destroy(gameObject,
+                animator.GetCurrentAnimatorStateInfo(0).length); // Destroy the game object after the animation is done
         }
 
         private void Update()
@@ -35,19 +37,16 @@ namespace Raydevs.VFX
 
         private void OnTriggerEnter2D(Collider2D col)
         {
-            if (!col.gameObject.CompareTag("Enemy")) return;
-            int randomDamage = UnityEngine.Random.Range(damage - 5, damage + 25);
-            impactHandler.HandleEnemyImpact(col,
-                randomDamage,
-                knockback,
-                false);
+            if (col.TryGetComponent(out IDamageable damageable))
+            {
+                impactHandler.HandleEnemyImpact(damageable, 1, damage, knockback, false);
+            }
         }
 
         private void OnDrawGizmos()
         {
             Gizmos.color = Color.red;
             Gizmos.DrawWireSphere(transform.position, circleCollider.radius);
-
         }
     }
 }

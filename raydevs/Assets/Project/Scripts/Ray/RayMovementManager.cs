@@ -1,27 +1,36 @@
-
 namespace Raydevs.Ray
 {
     using UnityEngine;
     using UnityEngine.InputSystem;
-    public class RayMovementManager: MonoBehaviour
+
+    public class RayMovementManager : MonoBehaviour
     {
-        [SerializeField] private Rigidbody2D _rigidbody;
+        #region Properties
+
         public bool IsGrounded { get; set; }
         public bool IsAbleToMove { get; set; }
         public bool IsJumpPerformed { get; set; }
         public float MoveDir { get; set; }
         public bool IsRunning { get; set; }
 
-        public Rigidbody2D Rigidbody => _rigidbody;
+        public Rigidbody2D Rigidbody { get; private set; }
+
+        #endregion
 
         private void OnEnable()
         {
             InputManager.OnJumpPressed += OnJump;
             InputManager.OnMove += OnMove;
         }
-        
-        public bool IsFalling => _rigidbody.velocity.y < -0.1f;
-        // TODO: Add falling state
+
+        public bool IsFalling => Rigidbody.velocity.y < -0.1f;
+
+        /// <summary>
+        /// Returns true if the character is about to hit the ground.
+        /// </summary>
+        /// <remarks>
+        /// This property casts a ray downwards from the character's position to check if there is any ground within a certain distance.
+        /// </remarks>
         public bool IsAboutToHitGround
         {
             get
@@ -32,16 +41,21 @@ namespace Raydevs.Ray
                     Vector2.down,
                     raycastDistance,
                     LayerMask.GetMask($"Ground"));
-                Debug.DrawRay(transform.position, Vector2.down * raycastDistance, Color.red);
                 return hit.collider != null;
             }
         }
+
         private void OnMove(InputAction.CallbackContext ctx) => MoveDir = ctx.ReadValue<float>();
 
         private void OnJump(InputAction.CallbackContext ctx)
         {
             IsJumpPerformed = ctx.ReadValueAsButton();
-        } 
+        }
+
+        private void Start()
+        {
+            Rigidbody = GetComponent<Rigidbody2D>();
+        }
 
         private void Update()
         {
@@ -51,10 +65,13 @@ namespace Raydevs.Ray
 
         private void FixedUpdate()
         {
-            if(IsAbleToMove)
-                _rigidbody.velocity = new Vector2(MoveDir * 9f, _rigidbody.velocity.y);
+            if (IsAbleToMove)
+                Rigidbody.velocity = new Vector2(MoveDir * 9f, Rigidbody.velocity.y);
         }
 
+        /// <summary>
+        /// Flips the character sprite horizontally based on the direction of movement.
+        /// </summary>
         private void Flip()
         {
             switch (MoveDir)

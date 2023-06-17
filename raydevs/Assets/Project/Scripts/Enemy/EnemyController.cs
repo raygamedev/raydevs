@@ -3,26 +3,29 @@ namespace Raydevs.Enemy
     using Interfaces;
     using System.Collections;
     using UnityEngine;
+
     public class EnemyController : MonoBehaviour, IDamageable
     {
-        [SerializeField] public float AlertDistance = 3f;
-        [SerializeField] public float AttackDistance = 1f;
-        [SerializeField] public int MaxHealth = 100;
-        [SerializeField] public float HitForce = 5f;
-        [SerializeField] public float HitForceUp = 5f;
-        [SerializeField] public float enemyStunTime = 0.5f;
+        [field: SerializeField] public float AlertDistance { get; private set; } = 3f;
+        [field: SerializeField] public float AttackDistance { get; private set; } = 1f;
+        [field: SerializeField] public int MaxHealth { get; private set; } = 100;
+        [field: SerializeField] public float HitForce { get; private set; } = 5f;
+        [field: SerializeField] public float HitForceUp { get; private set; } = 5f;
+        [field: SerializeField] public float EnemyStunTime { get; private set; } = 0.5f;
 
+        public Transform ObjectTransform { get; set; }
+        public bool IsDamageable { get; set; } = true;
 
-        public Rigidbody2D rigidbody;
+        public Rigidbody2D Rigidbody { get; private set; }
+
         public Animator animator;
         public string CurrentStateName;
 
         private EnemyHealthBar _enemyHealthBar;
-        private EnemyBaseState _currentState;
         private EnemyStateFactory _states;
         private Coroutine _stunCoroutine;
         private int _currentHealth;
-        
+
         public EnemyBaseState CurrentState { get; set; }
         public int Direction { get; set; }
         public float MoveSpeed { get; set; } = 50f;
@@ -36,29 +39,30 @@ namespace Raydevs.Enemy
                 origin: transform.position,
                 direction: new Vector2(x: Direction, y: 0),
                 distance: AttackDistance,
-                layerMask: LayerMask.GetMask("Ray")).collider != null;
+                layerMask: LayerMask.GetMask("Ray"));
 
         public bool RayDetectedCollider =>
             Physics2D.Raycast(
                 origin: transform.position,
                 direction: new Vector2(x: Direction, y: 0),
                 distance: AlertDistance,
-                layerMask: LayerMask.GetMask("Ray")).collider != null;
+                layerMask: LayerMask.GetMask("Ray"));
 
 
         private void Awake()
         {
             _currentHealth = MaxHealth;
             _enemyHealthBar = GetComponentInChildren<EnemyHealthBar>();
-            rigidbody = GetComponent<Rigidbody2D>();
+            Rigidbody = GetComponent<Rigidbody2D>();
             animator = GetComponent<Animator>();
+            ObjectTransform = transform;
 
             Direction = transform.localScale.x > 0 ? 1 : -1;
             _states = new EnemyStateFactory(this);
             CurrentState = _states.Patrol();
             CurrentState.EnterState(this, _states);
         }
-        
+
 
         private void Update()
         {
@@ -69,9 +73,10 @@ namespace Raydevs.Enemy
         private void FixedUpdate()
         {
             if (IsRunning && IsAbleToMove)
-                rigidbody.velocity =
-                    new Vector2(Direction * MoveSpeed * Time.deltaTime, rigidbody.velocity.y);
+                Rigidbody.velocity =
+                    new Vector2(Direction * MoveSpeed * Time.deltaTime, Rigidbody.velocity.y);
         }
+
         public void Flip()
         {
             Direction *= -1;
@@ -80,51 +85,71 @@ namespace Raydevs.Enemy
                 y: transform.localScale.y,
                 z: transform.localScale.z);
         }
-        private float CalculateCurrentHealthPercentage()
+
+        private float CalculateCurrentHealthPercentage() => (float)_currentHealth / MaxHealth;
+
+        private void FlipEnemyTowardsAttack(int attackDirection)
         {
-            return (float)_currentHealth / MaxHealth;
+            transform.localScale = new Vector3(attackDirection * -1, transform.localScale.y, transform.localScale.z);
         }
-        public void TakeDamage(int damage,float knockBackForce, bool isCritical)
+
+        private void KnockBack(float knockback)
         {
-            float force = knockBackForce * HitForce;
+            Rigidbody.AddForce(new Vector2(x: Direction * knockback, y: HitForceUp), ForceMode2D.Impulse);
+        }
+
+
+        private void HandleDeath()
+        {
+            IsDead = true;
+            // If enemy is Dead, transition immediately to Dead state
+            CurrentState = _states.Dead();
+            CurrentState.EnterState(this, _states);
+        }
+
+        /// <summary>
+        /// Reduces the current health of the enemy by the specified amount and updates the health bar.
+        /// If the current health is less than or equal to 0, sets the enemy as dead and transitions to the Dead state.
+        /// </summary>
+        public void TakeDamage(DamageInfo damageInfo)
+        {
             EnemyTookDamage = true;
+            FlipEnemyTowardsAttack(damageInfo.AttackDirection);
+
             // reset coroutine if enemy is already stunned
             if (_stunCoroutine != null)
             {
                 StopCoroutine(_stunCoroutine);
             }
 
-            // StartCoroutine(EnemyStunnedCoroutine());
-            _stunCoroutine = StartCoroutine(EnemyStunnedCoroutine());
-            _currentHealth -= damage;
+            StartCoroutine(EnemyStunnedCoroutine());
+
+            _currentHealth -= damageInfo.DamageAmount;
             _enemyHealthBar.ReduceHealthBar(CalculateCurrentHealthPercentage());
+
             if (_currentHealth <= 0)
-            {
-                IsDead = true;
-                // If enemy is Dead, transition immediately to Dead state
-                CurrentState = _states.Dead();
-                CurrentState.EnterState(this, _states);
-            }
-            rigidbody.AddForce(
-                isCritical
-                    ? new Vector2(x: -Direction * force * 2, y: HitForceUp * 2)
-                    : new Vector2(x: -Direction * force, y: HitForceUp), ForceMode2D.Impulse);
+                HandleDeath();
+            else
+                KnockBack(damageInfo.Knockback);
         }
+
+
         private IEnumerator EnemyStunnedCoroutine()
         {
             IsAbleToMove = false;
-            rigidbody.velocity = Vector2.zero;
-            yield return new WaitForSeconds(enemyStunTime);
+            Rigidbody.velocity = Vector2.zero;
+            yield return new WaitForSeconds(EnemyStunTime);
             IsAbleToMove = true;
         }
 
         private void OnCollisionEnter2D(Collision2D col)
         {
-            if(IsDead && col.gameObject.CompareTag("Player"))
+            if (IsDead && col.gameObject.CompareTag("Player"))
             {
                 Physics2D.IgnoreCollision(col.collider, GetComponent<Collider2D>());
             }
         }
+
         public void DestroyEnemy()
         {
             Destroy(gameObject);
