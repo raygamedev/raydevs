@@ -1,3 +1,5 @@
+using System;
+
 namespace Raydevs.Enemy
 {
     using Interfaces;
@@ -14,7 +16,12 @@ namespace Raydevs.Enemy
         [field: SerializeField] public float EnemyStunTime { get; private set; } = 0.5f;
 
         public Transform ObjectTransform { get; set; }
-        public bool IsDamageable { get; set; } = true;
+
+        public bool IsDamageable
+        {
+            get => !IsDead;
+            set => IsDead = !value;
+        }
 
         public Rigidbody2D Rigidbody { get; private set; }
 
@@ -143,12 +150,10 @@ namespace Raydevs.Enemy
             IsAbleToMove = true;
         }
 
-        private void OnCollisionEnter2D(Collision2D col)
+        private void OnTriggerEnter2D(Collider2D other)
         {
-            if (IsDead && col.gameObject.CompareTag("Player"))
-            {
-                Physics2D.IgnoreCollision(col.collider, GetComponent<Collider2D>());
-            }
+            if (other.CompareTag("Player"))
+                Debug.Log("Should hit Player");
         }
 
         public void DestroyEnemy()
