@@ -412,83 +412,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 7594184412488446233, guid: f73a8306233684069a15fcdca7b6d721, type: 3}
-      propertyPath: _hasSword
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7594184412488446233, guid: f73a8306233684069a15fcdca7b6d721, type: 3}
-      propertyPath: _hasSudoHammer
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7594184412488446233, guid: f73a8306233684069a15fcdca7b6d721, type: 3}
-      propertyPath: swordImpactVFX
-      value: 
-      objectReference: {fileID: 7887563744919019096, guid: d9e4f52c301bb4cb6994bef63de85f7d, type: 3}
-    - target: {fileID: 7594184412488446233, guid: f73a8306233684069a15fcdca7b6d721, type: 3}
-      propertyPath: SudoAttackRange
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7594184412488446233, guid: f73a8306233684069a15fcdca7b6d721, type: 3}
-      propertyPath: _hasReactThrowable
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7594184412488446233, guid: f73a8306233684069a15fcdca7b6d721, type: 3}
-      propertyPath: SudoAttackBoxSize.x
-      value: 0.99
-      objectReference: {fileID: 0}
-    - target: {fileID: 7594184412488446233, guid: f73a8306233684069a15fcdca7b6d721, type: 3}
-      propertyPath: SudoAttackBoxSize.y
-      value: 2.68
-      objectReference: {fileID: 0}
-    - target: {fileID: 7594184412488446233, guid: f73a8306233684069a15fcdca7b6d721, type: 3}
-      propertyPath: SudoAttackJumpForce
-      value: 1400
-      objectReference: {fileID: 0}
-    - target: {fileID: 7594184412488446233, guid: f73a8306233684069a15fcdca7b6d721, type: 3}
-      propertyPath: _groundLayer.m_Bits
-      value: 64
-      objectReference: {fileID: 0}
-    - target: {fileID: 7594184412488446233, guid: f73a8306233684069a15fcdca7b6d721, type: 3}
-      propertyPath: sudoAttackJumpForce
-      value: 1570.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 7594184412488446233, guid: f73a8306233684069a15fcdca7b6d721, type: 3}
-      propertyPath: sudoHammerImpactVFX
-      value: 
-      objectReference: {fileID: 224492019184660356, guid: dd2c4431471ea4623bbfcdf6653f2761, type: 3}
-    - target: {fileID: 7594184412488446233, guid: f73a8306233684069a15fcdca7b6d721, type: 3}
-      propertyPath: SudoAttackEnemyPoint
-      value: 
-      objectReference: {fileID: 1041056556}
-    - target: {fileID: 7594184412488446233, guid: f73a8306233684069a15fcdca7b6d721, type: 3}
-      propertyPath: SudoAttackGroundPoint
-      value: 
-      objectReference: {fileID: 1855033250}
-    - target: {fileID: 7594184412488446233, guid: f73a8306233684069a15fcdca7b6d721, type: 3}
-      propertyPath: SudoAttackColliderPoint
-      value: 
-      objectReference: {fileID: 1855033250}
-    - target: {fileID: 7594184412488446233, guid: f73a8306233684069a15fcdca7b6d721, type: 3}
-      propertyPath: SudoAttackColliderSize.x
-      value: 0.74
-      objectReference: {fileID: 0}
-    - target: {fileID: 7594184412488446233, guid: f73a8306233684069a15fcdca7b6d721, type: 3}
-      propertyPath: SudoAttackColliderSize.y
-      value: 0.79
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
-    m_AddedGameObjects:
-    - targetCorrespondingSourceObject: {fileID: 1592565834158962430, guid: f73a8306233684069a15fcdca7b6d721, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1855033250}
-    - targetCorrespondingSourceObject: {fileID: 1592565834158962430, guid: f73a8306233684069a15fcdca7b6d721, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1041056556}
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 1592565834158962304, guid: f73a8306233684069a15fcdca7b6d721, type: 3}
-      insertIndex: 5
-      addedObject: {fileID: 1419564802}
+    m_AddedGameObjects: []
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f73a8306233684069a15fcdca7b6d721, type: 3}
 --- !u!1 &519420028
 GameObject:
@@ -2294,37 +2221,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!1 &1041056555
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1041056556}
-  m_Layer: 8
-  m_Name: SudoAttackBoxPoint
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1041056556
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1041056555}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1, y: 0.09, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 719178464}
-  m_RootOrder: -1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1058686090
 GameObject:
   m_ObjectHideFlags: 0
@@ -2553,26 +2449,6 @@ MonoBehaviour:
   m_DeselectOnBackgroundClick: 1
   m_PointerBehavior: 0
   m_CursorLockBehavior: 0
---- !u!1 &1419564793 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 1592565834158962304, guid: f73a8306233684069a15fcdca7b6d721, type: 3}
-  m_PrefabInstance: {fileID: 281097453}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &1419564802
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1419564793}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1c9704c342944eefa7b3502eefb5f7d2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  enemyImpactVFX: {fileID: 7887563744919019096, guid: d9e4f52c301bb4cb6994bef63de85f7d, type: 3}
-  damageTextVFX: {fileID: 9189677441209755910, guid: acbe72b652d31419a83718e87dd3a3b7, type: 3}
-  criticalDamageTextVFX: {fileID: 8517536399420589249, guid: 5404b4237028247758eeb30fc55c02d5, type: 3}
 --- !u!1 &1739268271
 GameObject:
   m_ObjectHideFlags: 3
@@ -2695,37 +2571,6 @@ Transform:
   - {fileID: 820100892}
   - {fileID: 1866090185}
   m_Father: {fileID: 1058686091}
-  m_RootOrder: -1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &1855033249
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1855033250}
-  m_Layer: 8
-  m_Name: SudoAttackGroundPoint
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1855033250
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1855033249}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1, y: -1.28, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 719178464}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1866090184

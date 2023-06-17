@@ -11,9 +11,8 @@ GameObject:
   - component: {fileID: 1291436816267001661}
   - component: {fileID: 4642264875042496750}
   - component: {fileID: 662893170939376835}
-  - component: {fileID: 8570524737906772429}
-  - component: {fileID: -1114099715604371223}
   - component: {fileID: 1635139770436006756}
+  - component: {fileID: 2345671267880080378}
   m_Layer: 0
   m_Name: SudoHammerGroundImpactVFX
   m_TagString: Untagged
@@ -34,7 +33,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 8
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &4642264875042496750
 SpriteRenderer:
@@ -109,43 +108,6 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!114 &8570524737906772429
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 224492019184660356}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1c9704c342944eefa7b3502eefb5f7d2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  enemyImpactVFX: {fileID: 7887563744919019096, guid: d9e4f52c301bb4cb6994bef63de85f7d, type: 3}
-  damageTextVFX: {fileID: 3716838217396533459, guid: acbe72b652d31419a83718e87dd3a3b7, type: 3}
-  criticalDamageTextVFX: {fileID: 4190819772756317460, guid: 5404b4237028247758eeb30fc55c02d5, type: 3}
---- !u!114 &-1114099715604371223
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 224492019184660356}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8ba4b88e527e4d05ba2d953b1052d0d3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  damage: 30
-  knockback: 150
-  colliderRadiusTime: 0.23
-  maxColliderRadius: 5
-  animator: {fileID: 662893170939376835}
-  impactHandler: {fileID: 8570524737906772429}
-  circleCollider: {fileID: 1635139770436006756}
-  enemyLayer:
-    serializedVersion: 2
-    m_Bits: 128
 --- !u!58 &1635139770436006756
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -181,3 +143,15 @@ CircleCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Radius: 0.0001
+--- !u!114 &2345671267880080378
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 224492019184660356}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e115a7f4d80243e4a9c8e6c8760212b7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

@@ -44,6 +44,7 @@ GameObject:
   - component: {fileID: 7594184412488446233}
   - component: {fileID: 7046419015363725952}
   - component: {fileID: 5235619567238925784}
+  - component: {fileID: 6061048741181550318}
   - component: {fileID: 1592565834158962431}
   - component: {fileID: 1592565834158962427}
   - component: {fileID: 1592565834158962426}
@@ -71,6 +72,8 @@ Transform:
   - {fileID: 3012180934977155370}
   - {fileID: 5507683384889253213}
   - {fileID: 2207617228434958522}
+  - {fileID: 7310206885526962992}
+  - {fileID: 9072184523758905805}
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -86,7 +89,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d29a172b02f843f38298ec0b1fe9962e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _rigidbody: {fileID: 1592565834158962427}
 --- !u!114 &7594184412488446233
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -99,17 +101,30 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e9343b38bdc04639b2bc58ae11906b8a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _hasSword: 1
+  _hasSudoHammer: 1
+  _hasReactThrowable: 1
+  LightAttackDamage: 35
+  SudoAttackDamage: 0
+  SudoAttackKnockbackForce: 0
+  SudoAttackBoxSize: {x: 0.99, y: 2.68}
+  SwordAttackRange: 0.66
+  SudoAttackRange: 1
+  PunchAttackRange: 0.29
+  SudoAttackJumpForce: 1400
+  CriticalHitChance: 0.2
   SwordAttackPoint: {fileID: 3012180934977155370}
   PunchAttackPoint: {fileID: 2207617228434958522}
   SudoAttackPoint: {fileID: 5507683384889253213}
-  SwordAttackRange: 0.66
-  PunchAttackRange: 0.29
-  LightAttackDamage: 35
-  swordImpactVFX: {fileID: 978759674395814153, guid: d19639886ea244538a0d785713ed1274, type: 3}
-  damageText: {fileID: 3716838217396533459, guid: acbe72b652d31419a83718e87dd3a3b7, type: 3}
+  SudoAttackGroundPoint: {fileID: 7310206885526962992}
+  SudoAttackEnemyPoint: {fileID: 9072184523758905805}
+  sudoHammerGroundImpact: {fileID: 4192835255103215395, guid: 1a4252612bd4943bfab1fc790c1f786a, type: 3}
   _enemyLayer:
     serializedVersion: 2
     m_Bits: 128
+  _groundLayer:
+    serializedVersion: 2
+    m_Bits: 64
   shouldEnterCombatState: 0
 --- !u!114 &7046419015363725952
 MonoBehaviour:
@@ -141,6 +156,21 @@ MonoBehaviour:
   InteractManager: {fileID: 7046419015363725952}
   RayAnimator: {fileID: 1592565834158962431}
   CurrentStateName: 
+--- !u!114 &6061048741181550318
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1592565834158962304}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1c9704c342944eefa7b3502eefb5f7d2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enemyImpactVFX: {fileID: 7887563744919019096, guid: d9e4f52c301bb4cb6994bef63de85f7d, type: 3}
+  damageTextVFX: {fileID: 9189677441209755910, guid: acbe72b652d31419a83718e87dd3a3b7, type: 3}
+  criticalDamageTextVFX: {fileID: 8517536399420589249, guid: 5404b4237028247758eeb30fc55c02d5, type: 3}
 --- !u!95 &1592565834158962431
 Animator:
   serializedVersion: 5
@@ -366,6 +396,68 @@ CapsuleCollider2D:
   m_Offset: {x: 0, y: 0}
   m_Size: {x: 0.5, y: 0.0001}
   m_Direction: 0
+--- !u!1 &1939445105925474891
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7310206885526962992}
+  m_Layer: 8
+  m_Name: SudoAttackGroundPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7310206885526962992
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1939445105925474891}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 1, y: -1.28, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1592565834158962430}
+  m_RootOrder: -1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &3353377256322588113
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 9072184523758905805}
+  m_Layer: 8
+  m_Name: SudoAttackBoxPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &9072184523758905805
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3353377256322588113}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 1, y: 0.09, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1592565834158962430}
+  m_RootOrder: -1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &4284846568616234318
 GameObject:
   m_ObjectHideFlags: 0

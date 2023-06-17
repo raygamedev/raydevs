@@ -32,7 +32,7 @@ namespace Raydevs.Ray
         [SerializeField] public Transform SudoAttackGroundPoint;
         [SerializeField] public Transform SudoAttackEnemyPoint;
 
-        [Header("Prefabs")] [SerializeField] private GameObject sudoHammerImpactVFX;
+        [Header("Prefabs")] [SerializeField] private GameObject sudoHammerGroundImpact;
 
         [Header("Layers")] [SerializeField] private LayerMask _enemyLayer;
         [SerializeField] private LayerMask _groundLayer;
@@ -159,10 +159,6 @@ namespace Raydevs.Ray
             return Random.Range(LightAttackDamage, range);
         }
 
-        private int GetDirectionBetweenPoints(Vector2 pointA, Vector2 pointB)
-        {
-            return pointA.x > pointB.x ? 1 : -1;
-        }
 
         public void OnMoveForward(float force)
         {
@@ -211,7 +207,7 @@ namespace Raydevs.Ray
 
                     _impactHandler.HandleEnemyImpact(
                         damageable,
-                        GetDirectionBetweenPoints(damageable.ObjectTransform.position, transform.position),
+                        CombatUtils.GetDirectionBetweenPoints(transform.position, damageable.ObjectTransform.position),
                         randomDamage,
                         knockBackForce,
                         isCriticalHit);
@@ -228,15 +224,20 @@ namespace Raydevs.Ray
 
         public bool IsCriticalHit() => Random.Range(0f, 1f) < CriticalHitChance;
 
+
         public void SudoHitFrameEvent(int knockBackForce)
         {
             RaycastHit2D hit = Physics2D.CircleCast(SudoAttackGroundPoint.position, SudoAttackRange, Vector2.zero, 0,
                 _groundLayer);
 
-            if (hit.collider != null)
+            if (hit)
             {
-                Instantiate(sudoHammerImpactVFX, hit.point, Quaternion.identity);
-                // do something with pointOfContact
+                GameObject groundHit = Instantiate(
+                    sudoHammerGroundImpact,
+                    hit.point,
+                    Quaternion.identity,
+                    transform
+                );
             }
 
             // Using OverlapCircleNonAlloc to efficiently query for enemy collisions in a circular area,

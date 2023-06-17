@@ -90,7 +90,8 @@ namespace Raydevs.Enemy
 
         private void FlipEnemyTowardsAttack(int attackDirection)
         {
-            transform.localScale = new Vector3(attackDirection * -1, transform.localScale.y, transform.localScale.z);
+            Direction = attackDirection;
+            transform.localScale = new Vector3(attackDirection, transform.localScale.y, transform.localScale.z);
         }
 
         private void KnockBack(float knockback)
