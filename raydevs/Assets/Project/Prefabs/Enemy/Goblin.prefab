@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 3980116780140861139}
   - component: {fileID: 5200778175129619379}
   - component: {fileID: 3694759793051880838}
+  - component: {fileID: 8009235211613044505}
   m_Layer: 7
   m_Name: Goblin
   m_TagString: Enemy
@@ -35,7 +36,7 @@ Transform:
   m_Children:
   - {fileID: 3740616981803180481}
   m_Father: {fileID: 0}
-  m_RootOrder: 5
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &5472907015053443775
 SpriteRenderer:
@@ -122,13 +123,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 52a52e69cd73403a880d8406ede21b9d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  AlertDistance: 3
-  AttackDistance: 1
-  MaxHealth: 150
-  HitForce: 5
-  HitForceUp: 5
-  enemyStunTime: 0.5
-  rigidbody: {fileID: 5200778175129619379}
+  <AlertDistance>k__BackingField: 3
+  <AttackDistance>k__BackingField: 1
+  <MaxHealth>k__BackingField: 100
+  <HitForce>k__BackingField: 5
+  <HitForceUp>k__BackingField: 5
+  <EnemyStunTime>k__BackingField: 0.5
   animator: {fileID: 0}
   CurrentStateName: 
 --- !u!50 &5200778175129619379
@@ -173,7 +173,7 @@ CapsuleCollider2D:
     m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 256
   m_LayerOverridePriority: 0
   m_ForceSendLayers:
     serializedVersion: 2
@@ -188,6 +188,41 @@ CapsuleCollider2D:
     serializedVersion: 2
     m_Bits: 4294967295
   m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: -0.14, y: 0}
+  m_Size: {x: 0.91, y: 1.46}
+  m_Direction: 0
+--- !u!70 &8009235211613044505
+CapsuleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7579222037926477411}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 247
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: -0.14, y: 0}

@@ -368,6 +368,22 @@ PrefabInstance:
       propertyPath: m_Name
       value: Ray
       objectReference: {fileID: 0}
+    - target: {fileID: 1592565834158962429, guid: f73a8306233684069a15fcdca7b6d721, type: 3}
+      propertyPath: m_Color.a
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1592565834158962429, guid: f73a8306233684069a15fcdca7b6d721, type: 3}
+      propertyPath: m_Color.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1592565834158962429, guid: f73a8306233684069a15fcdca7b6d721, type: 3}
+      propertyPath: m_Color.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1592565834158962429, guid: f73a8306233684069a15fcdca7b6d721, type: 3}
+      propertyPath: m_Color.r
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1592565834158962430, guid: f73a8306233684069a15fcdca7b6d721, type: 3}
       propertyPath: m_RootOrder
       value: 2
