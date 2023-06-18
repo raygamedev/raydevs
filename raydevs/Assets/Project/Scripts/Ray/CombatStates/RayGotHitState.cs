@@ -6,24 +6,29 @@ namespace Raydevs.Ray.CombatStates
     public class RayGotHitState : RayBaseState
     {
         private const float ColorTransitionDuration = 0.2f;
-        private const int ColorTransitionCount = 2;
+        private const int ColorTransitionCount = 3;
+        private const float KnockbackXForce = 40f;
+        private const float KnockbackYForce = 15f;
 
         private readonly Color _flashColor = new Color(100f / 255f, 100f / 255f, 100f / 255f); // A darker color.
 
-        private Renderer _renderer;
-        private Color _originalColor;
+        private readonly Color _originalColor = new Color(1f, 1f, 1f, 1f);
 
-        private bool _isCoroutineEnded;
+        private readonly Renderer _renderer;
+
 
         public RayGotHitState(RayStateMachine currentContext, RayStateFactory stateFactory) : base(currentContext,
             stateFactory)
         {
+            _renderer = ctx.GetComponent<Renderer>();
         }
 
         public override void EnterState(RayStateMachine currentContext, RayStateFactory stateFactory)
         {
-            _renderer = ctx.GetComponent<Renderer>();
-            _originalColor = _renderer.material.color;
+            ctx.CombatManager.IsDamageable = false;
+            ctx.RayAnimator.Play("GotHit");
+            ApplyKnockback();
+            ctx.StartCoroutine(FreezeMovement());
             ctx.StartCoroutine(ChangeColor());
         }
 
@@ -39,8 +44,15 @@ namespace Raydevs.Ray.CombatStates
 
         public override void CheckSwitchState()
         {
-            if (_isCoroutineEnded)
+            if (ctx.MovementManager.IsAbleToMove)
                 SwitchState(state.Combat());
+        }
+
+        private IEnumerator FreezeMovement()
+        {
+            ctx.MovementManager.IsAbleToMove = false;
+            yield return new WaitForSeconds(0.4f);
+            ctx.MovementManager.IsAbleToMove = true;
         }
 
         private IEnumerator ChangeColor()
@@ -54,7 +66,7 @@ namespace Raydevs.Ray.CombatStates
                 yield return ctx.StartCoroutine(LerpColor(_flashColor, _originalColor));
             }
 
-            _isCoroutineEnded = true;
+            ctx.CombatManager.IsDamageable = true;
         }
 
         private IEnumerator LerpColor(Color startColor, Color endColor)
@@ -70,6 +82,13 @@ namespace Raydevs.Ray.CombatStates
 
             // Ensure the final color is set correctly.
             _renderer.material.color = endColor;
+        }
+
+        public void ApplyKnockback()
+        {
+            Vector2 knockbackDirection =
+                new Vector2(-ctx.MovementManager.MoveDir * KnockbackXForce, 1f * KnockbackYForce);
+            ctx.CombatManager.Rigidbody.AddForce(knockbackDirection, ForceMode2D.Impulse);
         }
     }
 }

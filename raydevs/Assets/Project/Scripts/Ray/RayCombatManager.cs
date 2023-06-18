@@ -8,6 +8,8 @@ namespace Raydevs.Ray
 
     public class RayCombatManager : MonoBehaviour, IDamageable
     {
+        [Header("Dev settings")] public float KnockbackXForce = 10f;
+        public float KnockbackYForce = 5f;
         [Header("Stats")] [SerializeField] public int LightAttackDamage;
         [SerializeField] public int SudoAttackDamage;
         [SerializeField] public float SudoAttackKnockbackForce;
@@ -37,7 +39,6 @@ namespace Raydevs.Ray
         private const float AttackTimer = 0.7f;
         private const float BattleStanceTimer = 5f;
 
-        private Rigidbody2D _rigidbody;
         private BoxCollider2D _sudoAttackCollider;
         private ImpactHandler _impactHandler;
         private Coroutine _attackTimerCoroutine;
@@ -69,6 +70,8 @@ namespace Raydevs.Ray
         public int PressCounter { get; set; }
 
         public bool RayGotHit { get; set; }
+
+        public Rigidbody2D Rigidbody { get; private set; }
 
         private void OnEnable()
         {
@@ -163,12 +166,12 @@ namespace Raydevs.Ray
 
         public void OnMoveForward(float force)
         {
-            _rigidbody.AddForce(GetMoveDirection() * force, ForceMode2D.Impulse);
+            Rigidbody.AddForce(GetMoveDirection() * force, ForceMode2D.Impulse);
         }
 
         public void OnSudoAttackMiniJumpFrameEvent(float force)
         {
-            _rigidbody.AddForce(Vector2.up * SudoAttackJumpForce, ForceMode2D.Force);
+            Rigidbody.AddForce(Vector2.up * SudoAttackJumpForce, ForceMode2D.Force);
         }
 
         private void Awake()
@@ -179,7 +182,7 @@ namespace Raydevs.Ray
 
         private void Start()
         {
-            _rigidbody = GetComponent<Rigidbody2D>();
+            Rigidbody = GetComponent<Rigidbody2D>();
             _impactHandler = GetComponent<ImpactHandler>();
         }
 

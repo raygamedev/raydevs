@@ -151,10 +151,11 @@ namespace Raydevs.Enemy
         {
             // Enemy collider is set to include only the Ray layer,
             // hence no need to check which layer the other collider is on
-            if (player.TryGetComponent(out IDamageable damageable))
-            {
+            if (IsDead) return;
+            if (!player.TryGetComponent(out IDamageable damageable)) return;
+
+            if (damageable.IsDamageable)
                 damageable.TakeDamage(new DamageInfo(10));
-            }
         }
 
         public void DestroyEnemy()
