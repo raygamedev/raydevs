@@ -8,12 +8,6 @@ namespace Raydevs.Ray
 
     public class RayCombatManager : MonoBehaviour, IDamageable
     {
-        [Header("Developer Settings")] [SerializeField]
-        private bool _hasSword;
-
-        [SerializeField] private bool _hasSudoHammer;
-        [SerializeField] private bool _hasReactThrowable;
-
         [Header("Stats")] [SerializeField] public int LightAttackDamage;
         [SerializeField] public int SudoAttackDamage;
         [SerializeField] public float SudoAttackKnockbackForce;
@@ -57,7 +51,7 @@ namespace Raydevs.Ray
 
         public bool IsDamageable { get; set; } = true;
 
-        public bool HasSword { get; set; }
+        public bool HasSword { get; set; } = true;
         public bool HasSudoHammer { get; set; } = true;
         public bool HasReactThrowable { get; set; } = true;
 
@@ -73,6 +67,8 @@ namespace Raydevs.Ray
         public bool ComboFinished { get; set; }
 
         public int PressCounter { get; set; }
+
+        public bool RayGotHit { get; set; }
 
         private void OnEnable()
         {
@@ -190,11 +186,8 @@ namespace Raydevs.Ray
 
         private void Update()
         {
-            // TODO: Remove this
-            HasSword = _hasSword;
-            HasSudoHammer = _hasSudoHammer;
-            HasReactThrowable = _hasReactThrowable;
-            shouldEnterCombatState = IsLightAttackPerformed || IsSudoAttackPerformed || IsReactAttackPerformed;
+            shouldEnterCombatState =
+                RayGotHit || IsLightAttackPerformed || IsSudoAttackPerformed || IsReactAttackPerformed;
             if (ComboFinished) PressCounter = 0;
         }
 
@@ -281,6 +274,7 @@ namespace Raydevs.Ray
 
         public void TakeDamage(DamageInfo damageInfo)
         {
+            RayGotHit = true;
             Debug.Log("Player took damage");
         }
     }
