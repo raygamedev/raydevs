@@ -18,7 +18,7 @@ namespace Raydevs.Interfaces
 
     public interface IDamageable
     {
-        Transform ObjectTransform { get; set; }
+        Transform ObjectTransform { get; }
         bool IsDamageable { get; set; }
         void TakeDamage(DamageInfo damageInfo);
     }

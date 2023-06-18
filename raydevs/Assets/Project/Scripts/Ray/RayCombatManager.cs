@@ -6,7 +6,7 @@ namespace Raydevs.Ray
     using UnityEngine.InputSystem;
     using Random = UnityEngine.Random;
 
-    public class RayCombatManager : MonoBehaviour
+    public class RayCombatManager : MonoBehaviour, IDamageable
     {
         [Header("Developer Settings")] [SerializeField]
         private bool _hasSword;
@@ -51,6 +51,11 @@ namespace Raydevs.Ray
 
         private Collider2D[] _swordAttackHits;
         private Collider2D[] _sudoHammerAttackHits;
+
+
+        public Transform ObjectTransform => transform;
+
+        public bool IsDamageable { get; set; } = true;
 
         public bool HasSword { get; set; }
         public bool HasSudoHammer { get; set; } = true;
@@ -172,10 +177,14 @@ namespace Raydevs.Ray
 
         private void Awake()
         {
-            _rigidbody = GetComponent<Rigidbody2D>();
-            _impactHandler = GetComponent<ImpactHandler>();
             _swordAttackHits = new Collider2D[MAX_ENEMY_SWORD_HITS];
             _sudoHammerAttackHits = new Collider2D[MAX_ENEMY_SUDO_HAMMER_HITS];
+        }
+
+        private void Start()
+        {
+            _rigidbody = GetComponent<Rigidbody2D>();
+            _impactHandler = GetComponent<ImpactHandler>();
         }
 
 
@@ -212,12 +221,7 @@ namespace Raydevs.Ray
                         knockBackForce,
                         isCriticalHit);
                 }
-                // float attackDirection = (_swordAttackHits[i].transform.position.x - SwordAttackPoint.position.x);
-                // Debug.Log(attackDirection);
-                // _impactHandler.HandleEnemyImpact(damageable, attackDirection,randomDamage, knockBackForce, isCriticalHit);
 
-
-                // Reset the collider to null to avoid hitting the same enemy twice
                 _swordAttackHits[i] = null;
             }
         }
@@ -232,7 +236,7 @@ namespace Raydevs.Ray
 
             if (hit)
             {
-                GameObject groundHit = Instantiate(
+                Instantiate(
                     sudoHammerGroundImpact,
                     hit.point,
                     Quaternion.identity,
@@ -273,6 +277,11 @@ namespace Raydevs.Ray
             Gizmos.DrawWireSphere(SudoAttackGroundPoint.position, SudoAttackRange);
             Gizmos.color = Color.blue;
             Gizmos.DrawWireCube(SudoAttackEnemyPoint.position, SudoAttackBoxSize);
+        }
+
+        public void TakeDamage(DamageInfo damageInfo)
+        {
+            Debug.Log("Player took damage");
         }
     }
 }

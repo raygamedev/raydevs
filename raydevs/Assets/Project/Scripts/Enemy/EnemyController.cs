@@ -13,8 +13,13 @@ namespace Raydevs.Enemy
         [field: SerializeField] public float HitForceUp { get; private set; } = 5f;
         [field: SerializeField] public float EnemyStunTime { get; private set; } = 0.5f;
 
-        public Transform ObjectTransform { get; set; }
-        public bool IsDamageable { get; set; } = true;
+        public Transform ObjectTransform => transform;
+
+        public bool IsDamageable
+        {
+            get => !IsDead;
+            set => IsDead = !value;
+        }
 
         public Rigidbody2D Rigidbody { get; private set; }
 
@@ -55,7 +60,6 @@ namespace Raydevs.Enemy
             _enemyHealthBar = GetComponentInChildren<EnemyHealthBar>();
             Rigidbody = GetComponent<Rigidbody2D>();
             animator = GetComponent<Animator>();
-            ObjectTransform = transform;
 
             Direction = transform.localScale.x > 0 ? 1 : -1;
             _states = new EnemyStateFactory(this);
@@ -143,11 +147,13 @@ namespace Raydevs.Enemy
             IsAbleToMove = true;
         }
 
-        private void OnCollisionEnter2D(Collision2D col)
+        private void OnTriggerEnter2D(Collider2D player)
         {
-            if (IsDead && col.gameObject.CompareTag("Player"))
+            // Enemy collider is set to include only the Ray layer,
+            // hence no need to check which layer the other collider is on
+            if (player.TryGetComponent(out IDamageable damageable))
             {
-                Physics2D.IgnoreCollision(col.collider, GetComponent<Collider2D>());
+                damageable.TakeDamage(new DamageInfo(10, Direction, HitForce));
             }
         }
 
