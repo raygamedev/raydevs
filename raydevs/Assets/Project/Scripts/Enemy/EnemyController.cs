@@ -153,7 +153,7 @@ namespace Raydevs.Enemy
             // hence no need to check which layer the other collider is on
             if (player.TryGetComponent(out IDamageable damageable))
             {
-                damageable.TakeDamage(new DamageInfo(10, Direction, HitForce));
+                damageable.TakeDamage(new DamageInfo(10));
             }
         }
 

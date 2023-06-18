@@ -8,7 +8,7 @@ namespace Raydevs.Interfaces
         public int AttackDirection;
         public float Knockback;
 
-        public DamageInfo(int damageAmount, int attackDirection, float knockback = 0)
+        public DamageInfo(int damageAmount, int attackDirection = 0, float knockback = 0)
         {
             DamageAmount = damageAmount;
             AttackDirection = attackDirection;
