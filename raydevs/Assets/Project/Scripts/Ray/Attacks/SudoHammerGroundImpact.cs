@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Raydevs.Interfaces;
 using UnityEngine;
 
@@ -18,6 +19,7 @@ namespace Raydevs.Ray.Attacks
 
         private float _animationTimer;
         private float _scale;
+        private HashSet<IDamageable> _enemiesHit = new HashSet<IDamageable>();
 
         private void Start()
         {
@@ -37,17 +39,19 @@ namespace Raydevs.Ray.Attacks
 
         private void OnTriggerEnter2D(Collider2D col)
         {
-            if (col.TryGetComponent(out IDamageable damageable))
-            {
-                impactHandler.HandleEnemyImpact(
-                    damageable,
-                    CombatUtils.GetDirectionBetweenPoints(
-                        transform.parent.position,
-                        damageable.ObjectTransform.position),
-                    damage,
-                    knockback,
-                    false);
-            }
+            if (!col.TryGetComponent(out IDamageable damageable)) return;
+
+            if (_enemiesHit.Contains(damageable)) return;
+
+            impactHandler.HandleEnemyImpact(
+                damageable,
+                CombatUtils.GetDirectionBetweenPoints(
+                    transform.parent.position,
+                    damageable.ObjectTransform.position),
+                damage,
+                knockback,
+                false);
+            _enemiesHit.Add(damageable);
         }
 
         private void OnDrawGizmos()
