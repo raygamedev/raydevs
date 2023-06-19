@@ -6,12 +6,13 @@ namespace Raydevs.Ray.Attacks
 
     public class SudoHammerGroundImpact : MonoBehaviour
     {
-        public Vector2 RaysPosition;
+        private Transform RaysTransform { get; set; }
 
         private const float ColliderRadiusTime = 0.3f;
         private const float MaxColliderRadius = 5f;
 
-        private int _damage;
+        private int _minDamage;
+        private int _maxDamage;
         private Vector2 _knockbackForce;
         private float _animationTimer;
         private float _scale;
@@ -23,9 +24,9 @@ namespace Raydevs.Ray.Attacks
 
         private readonly HashSet<IDamageable> _enemiesHit = new HashSet<IDamageable>();
 
-        public void Initialize(Vector2 position)
+        public void Initialize(Transform raysTransform)
         {
-            RaysPosition = position;
+            RaysTransform = raysTransform;
         }
 
         private void Awake()
@@ -62,10 +63,11 @@ namespace Raydevs.Ray.Attacks
             _enemiesHit.Clear();
         }
 
-        public void OnHit(Vector3 position, int damage, Vector2 knockbackForce)
+        public void OnHit(Vector3 position, int minDamage, int maxDamage, Vector2 knockbackForce)
         {
             _transform.position = position;
-            _damage = damage;
+            _minDamage = minDamage;
+            _maxDamage = maxDamage;
             _knockbackForce = knockbackForce;
             gameObject.SetActive(true);
         }
@@ -75,13 +77,14 @@ namespace Raydevs.Ray.Attacks
             if (!col.TryGetComponent(out IDamageable damageable)) return;
 
             if (_enemiesHit.Contains(damageable)) return;
+            int attackDirection = CombatUtils.GetDirectionBetweenPoints(
+                RaysTransform.position,
+                damageable.ObjectTransform.position);
 
             DamageInfo damageInfo = new DamageInfo(
-                damageAmount: _damage,
-                attackDirection: CombatUtils.GetDirectionBetweenPoints(
-                    RaysPosition,
-                    damageable.ObjectTransform.position),
-                knockbackForce: _knockbackForce);
+                damageAmount: CombatUtils.GetRandomHitDamage(_minDamage, _maxDamage),
+                attackDirection: attackDirection,
+                knockbackForce: _knockbackForce * attackDirection);
             _impactHandler.HandleEnemyImpact(damageable, damageInfo);
             _enemiesHit.Add(damageable);
         }

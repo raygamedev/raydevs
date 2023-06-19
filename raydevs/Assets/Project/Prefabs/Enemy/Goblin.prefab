@@ -124,18 +124,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 52a52e69cd73403a880d8406ede21b9d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  impactVFX: {fileID: 0}
-  damageTextVFX: {fileID: 0}
-  criticalDamageTextVFX: {fileID: 0}
+  <EnemyStats>k__BackingField: {fileID: 11400000, guid: cc5761a6047e74632a84dcb53de7b224, type: 2}
   EnemyAttackPoint: {fileID: 2532212863474439692}
   EnemyAttackRadius: 0.35
-  <AlertDistance>k__BackingField: 3
-  <AttackDistance>k__BackingField: 1
-  <MaxHealth>k__BackingField: 100
-  <HitForce>k__BackingField: 5
   <HitForceUp>k__BackingField: 5
   <EnemyStunTime>k__BackingField: 0.5
-  animator: {fileID: 0}
   CurrentStateName: 
 --- !u!50 &5200778175129619379
 Rigidbody2D:

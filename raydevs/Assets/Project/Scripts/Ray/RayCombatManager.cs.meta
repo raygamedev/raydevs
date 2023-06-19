@@ -1,3 +1,16 @@
 fileFormatVersion: 2
 guid: e9343b38bdc04639b2bc58ae11906b8a
-timeCreated: 1685134593
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - <CombatStats>k__BackingField: {instanceID: 0}
+  - SwordAttackPoint: {instanceID: 0}
+  - PunchAttackPoint: {instanceID: 0}
+  - SudoAttackGroundPoint: {instanceID: 0}
+  - sudoHammerGroundImpactPrefab: {instanceID: 0}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

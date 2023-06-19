@@ -81,7 +81,7 @@ namespace Raydevs.Ray
                 GameObjectUtils.InstantiateAndGetComponent<SudoHammerGroundImpact>(
                     sudoHammerGroundImpactPrefab,
                     ObjectTransform.position);
-            _sudoHammerGroundImpactScript.Initialize(ObjectTransform.position);
+            _sudoHammerGroundImpactScript.Initialize(ObjectTransform);
         }
 
         private void Start()
@@ -237,8 +237,8 @@ namespace Raydevs.Ray
             {
                 _sudoHammerGroundImpactScript.OnHit(
                     position: hit.point,
-                    damage: CombatUtils.GetRandomHitDamage(CombatStats.SudoAttackDamage,
-                        CombatStats.MaxSudoHammerDamage),
+                    minDamage: CombatStats.SudoAttackDamage,
+                    maxDamage: CombatStats.MaxSudoHammerDamage,
                     knockbackForce: CombatStats.SudoAttackKnockbackForce);
             }
         }

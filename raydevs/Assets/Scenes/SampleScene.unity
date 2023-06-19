@@ -181,7 +181,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8335783907783064797, guid: cd6b02e8e9a124943baef25571e487d3, type: 3}
       propertyPath: _spawnOnStart
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -2721,26 +2721,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 3980116780140861139, guid: 16e2e86f68f6d4132b22dbf5123ac21e, type: 3}
-      propertyPath: enemySO
-      value: 
-      objectReference: {fileID: 11400000, guid: cc5761a6047e74632a84dcb53de7b224, type: 2}
-    - target: {fileID: 3980116780140861139, guid: 16e2e86f68f6d4132b22dbf5123ac21e, type: 3}
-      propertyPath: impactVFX
-      value: 
-      objectReference: {fileID: 7887563744919019096, guid: d9e4f52c301bb4cb6994bef63de85f7d, type: 3}
-    - target: {fileID: 3980116780140861139, guid: 16e2e86f68f6d4132b22dbf5123ac21e, type: 3}
-      propertyPath: damageTextVFX
-      value: 
-      objectReference: {fileID: 9189677441209755910, guid: acbe72b652d31419a83718e87dd3a3b7, type: 3}
-    - target: {fileID: 3980116780140861139, guid: 16e2e86f68f6d4132b22dbf5123ac21e, type: 3}
-      propertyPath: criticalDamageTextVFX
-      value: 
-      objectReference: {fileID: 8517536399420589249, guid: 5404b4237028247758eeb30fc55c02d5, type: 3}
-    - target: {fileID: 3980116780140861139, guid: 16e2e86f68f6d4132b22dbf5123ac21e, type: 3}
-      propertyPath: <EnemyStats>k__BackingField
-      value: 
-      objectReference: {fileID: 11400000, guid: cc5761a6047e74632a84dcb53de7b224, type: 2}
     - target: {fileID: 7579222037926477411, guid: 16e2e86f68f6d4132b22dbf5123ac21e, type: 3}
       propertyPath: m_Name
       value: Goblin
