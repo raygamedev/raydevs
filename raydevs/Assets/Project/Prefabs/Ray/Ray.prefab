@@ -89,6 +89,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d29a172b02f843f38298ec0b1fe9962e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  <MovementStats>k__BackingField: {fileID: 0}
 --- !u!114 &7594184412488446233
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -101,23 +102,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e9343b38bdc04639b2bc58ae11906b8a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _hasSword: 1
-  _hasSudoHammer: 1
-  _hasReactThrowable: 1
-  LightAttackDamage: 35
-  SudoAttackDamage: 0
-  SudoAttackKnockbackForce: 0
-  SudoAttackBoxSize: {x: 0.99, y: 2.68}
-  SwordAttackRange: 0.66
-  SudoAttackRange: 1
-  PunchAttackRange: 0.29
-  SudoAttackJumpForce: 1400
-  CriticalHitChance: 0.2
   SwordAttackPoint: {fileID: 3012180934977155370}
   PunchAttackPoint: {fileID: 2207617228434958522}
   SudoAttackPoint: {fileID: 5507683384889253213}
   SudoAttackGroundPoint: {fileID: 7310206885526962992}
-  SudoAttackEnemyPoint: {fileID: 9072184523758905805}
   sudoHammerGroundImpact: {fileID: 4192835255103215395, guid: 1a4252612bd4943bfab1fc790c1f786a, type: 3}
   _enemyLayer:
     serializedVersion: 2
@@ -376,7 +364,7 @@ CapsuleCollider2D:
     m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 439
   m_LayerOverridePriority: 0
   m_ForceSendLayers:
     serializedVersion: 2
