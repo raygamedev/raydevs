@@ -1,11 +1,18 @@
 namespace Raydevs.Enemy
 {
+    using VFX;
     using Interfaces;
     using System.Collections;
     using UnityEngine;
 
     public class EnemyController : MonoBehaviour, IDamageable
     {
+        [Header("Prefabs")] [SerializeField] private GameObject impactVFX;
+        [SerializeField] private DamageText damageTextVFX;
+        [SerializeField] private DamageText criticalDamageTextVFX;
+
+        [SerializeField] private Transform EnemyAttackPoint;
+        [SerializeField] private float EnemyAttackRadius;
         [field: SerializeField] public float AlertDistance { get; private set; } = 3f;
         [field: SerializeField] public float AttackDistance { get; private set; } = 1f;
         [field: SerializeField] public int MaxHealth { get; private set; } = 100;
@@ -27,6 +34,7 @@ namespace Raydevs.Enemy
         public string CurrentStateName;
 
         private EnemyHealthBar _enemyHealthBar;
+        private LayerMask _playerLayerMask;
         private EnemyStateFactory _states;
         private Coroutine _stunCoroutine;
         private int _currentHealth;
@@ -54,14 +62,15 @@ namespace Raydevs.Enemy
                 layerMask: LayerMask.GetMask("Ray"));
 
 
-        private void Awake()
+        private void Start()
         {
             _currentHealth = MaxHealth;
+            _playerLayerMask = LayerMask.GetMask("Ray");
             _enemyHealthBar = GetComponentInChildren<EnemyHealthBar>();
             Rigidbody = GetComponent<Rigidbody2D>();
             animator = GetComponent<Animator>();
 
-            Direction = transform.localScale.x > 0 ? 1 : -1;
+            Direction = ObjectTransform.localScale.x > 0 ? 1 : -1;
             _states = new EnemyStateFactory(this);
             CurrentState = _states.Patrol();
             CurrentState.EnterState(this, _states);
@@ -84,10 +93,10 @@ namespace Raydevs.Enemy
         public void Flip()
         {
             Direction *= -1;
-            transform.localScale = new Vector3(
+            ObjectTransform.localScale = new Vector3(
                 x: Direction,
-                y: transform.localScale.y,
-                z: transform.localScale.z);
+                y: ObjectTransform.localScale.y,
+                z: ObjectTransform.localScale.z);
         }
 
         private float CalculateCurrentHealthPercentage() => (float)_currentHealth / MaxHealth;
@@ -95,7 +104,8 @@ namespace Raydevs.Enemy
         private void FlipEnemyTowardsAttack(int attackDirection)
         {
             Direction = attackDirection;
-            transform.localScale = new Vector3(attackDirection, transform.localScale.y, transform.localScale.z);
+            ObjectTransform.localScale =
+                new Vector3(attackDirection, ObjectTransform.localScale.y, ObjectTransform.localScale.z);
         }
 
         private void KnockBack(float knockback)
@@ -147,6 +157,26 @@ namespace Raydevs.Enemy
             IsAbleToMove = true;
         }
 
+        public void HandlePlayerMeleeImpact(
+            IDamageable player,
+            int damage,
+            float knockback,
+            bool isUseImpactVFX,
+            bool isCritical)
+        {
+            if (player.IsDamageable == false) return;
+            DamageInfo damageInfo = new DamageInfo(damageAmount: damage, knockback: knockback);
+            player.TakeDamage(damageInfo);
+            if (isUseImpactVFX)
+                Instantiate(impactVFX, player.ObjectTransform.position, Quaternion.identity);
+
+
+            DamageText damageText = isCritical
+                ? Instantiate(criticalDamageTextVFX, player.ObjectTransform.position, Quaternion.identity)
+                : Instantiate(damageTextVFX, player.ObjectTransform.position, Quaternion.identity);
+            damageText.SetDamageText(damage, player.ObjectTransform.position);
+        }
+
         private void OnTriggerEnter2D(Collider2D player)
         {
             // Enemy collider is set to include only the Ray layer,
@@ -154,8 +184,26 @@ namespace Raydevs.Enemy
             if (IsDead) return;
             if (!player.TryGetComponent(out IDamageable damageable)) return;
 
-            if (damageable.IsDamageable)
-                damageable.TakeDamage(new DamageInfo(10));
+            // TODO: Ray add scriptable objects for damage and knockback
+            HandlePlayerMeleeImpact(damageable, 10, 5f, false, false);
+        }
+
+
+        public void EnemyAttackFrameEvent()
+        {
+            Collider2D player =
+                Physics2D.OverlapCircle(EnemyAttackPoint.position, EnemyAttackRadius, _playerLayerMask);
+            if (player == null) return;
+            if (!player.TryGetComponent(out IDamageable playerDamageable)) return;
+
+            // TODO: Ray add scriptable objects for damage and knockback
+            HandlePlayerMeleeImpact(playerDamageable, 10, 5f, true, false);
+        }
+
+        private void OnDrawGizmos()
+        {
+            Gizmos.color = Color.red;
+            Gizmos.DrawWireSphere(EnemyAttackPoint.position, EnemyAttackRadius);
         }
 
         public void DestroyEnemy()
