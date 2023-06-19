@@ -84,7 +84,7 @@ namespace Raydevs.Ray.Attacks
             DamageInfo damageInfo = new DamageInfo(
                 damageAmount: CombatUtils.GetRandomHitDamage(_minDamage, _maxDamage),
                 attackDirection: attackDirection,
-                knockbackForce: _knockbackForce * attackDirection);
+                knockbackForce: _knockbackForce);
             _impactHandler.HandleEnemyImpact(damageable, damageInfo);
             _enemiesHit.Add(damageable);
         }

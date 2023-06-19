@@ -1,3 +1,5 @@
+using System;
+
 namespace Raydevs.Ray
 {
     using Attacks;
@@ -81,7 +83,7 @@ namespace Raydevs.Ray
                 GameObjectUtils.InstantiateAndGetComponent<SudoHammerGroundImpact>(
                     sudoHammerGroundImpactPrefab,
                     ObjectTransform.position);
-            _sudoHammerGroundImpactScript.Initialize(ObjectTransform);
+            _sudoHammerGroundImpactScript.Initialize(transform);
         }
 
         private void Start()

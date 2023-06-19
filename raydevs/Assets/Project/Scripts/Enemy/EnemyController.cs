@@ -106,7 +106,7 @@ namespace Raydevs.Enemy
 
         private void KnockBackEnemy(Vector2 knockbackForce)
         {
-            Rigidbody.AddForce(new Vector2(Direction * knockbackForce.x, knockbackForce.y), ForceMode2D.Impulse);
+            Rigidbody.AddForce(new Vector2(-1 * Direction * knockbackForce.x, knockbackForce.y), ForceMode2D.Impulse);
         }
 
 
