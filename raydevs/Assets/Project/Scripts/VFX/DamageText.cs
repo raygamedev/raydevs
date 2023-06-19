@@ -1,3 +1,4 @@
+using UnityEngine.UI;
 
 namespace Raydevs.VFX
 {
@@ -5,6 +6,7 @@ namespace Raydevs.VFX
     using UnityEngine;
     using TMPro;
     using Random = UnityEngine.Random;
+
     public class DamageText : MonoBehaviour
     {
         [SerializeField] private TextMeshPro _textMeshPro;
@@ -13,11 +15,14 @@ namespace Raydevs.VFX
         [SerializeField] private float moveSpeed;
         [SerializeField] private Vector2 spawnOffset;
         [SerializeField] private Vector2 moveDirection;
+        [SerializeField] private SpriteRenderer criticalHitIcon;
 
         private Vector3 _randomOffset;
+        private bool _isCriticalHitIconNotNull;
 
         private void Start()
         {
+            _isCriticalHitIconNotNull = criticalHitIcon != null;
             Destroy(gameObject, destroyTime);
             // Randomize spawn position
             Vector3 randomizedSpawnPosition = transform.position + new Vector3(
@@ -39,7 +44,22 @@ namespace Raydevs.VFX
         private IEnumerator FadeAndMoveText()
         {
             Color originalColor = _textMeshPro.color;
+            Color originalIconColor =
+                _isCriticalHitIconNotNull
+                    ? criticalHitIcon.color
+                    : default; // Capture the original color of the critical hit icon if it's present
+
             float elapsed = 0f;
+
+            while (elapsed < 0.3f) // Move for 0.3 seconds before starting fade
+            {
+                elapsed += Time.deltaTime;
+                // Only move the text in the given direction
+                transform.position += (Vector3)(moveDirection.normalized * (moveSpeed * Time.deltaTime));
+                yield return null; // Wait for the next frame
+            }
+
+            elapsed = 0f; // Reset elapsed time for the fade
 
             while (elapsed < fadeTime)
             {
@@ -55,7 +75,19 @@ namespace Raydevs.VFX
 
                 _textMeshPro.color = newColor;
 
-                // Move the text in the given direction
+                // If the critical hit icon is present, fade it out along with the text
+                if (_isCriticalHitIconNotNull)
+                {
+                    Color newIconColor = new Color(
+                        originalIconColor.r,
+                        originalIconColor.g,
+                        originalIconColor.b,
+                        Mathf.Lerp(originalIconColor.a, 0f, normalizedTime));
+
+                    criticalHitIcon.color = newIconColor;
+                }
+
+                // Continue moving the text in the given direction
                 transform.position += (Vector3)(moveDirection.normalized * (moveSpeed * Time.deltaTime));
 
                 yield return null; // Wait for the next frame

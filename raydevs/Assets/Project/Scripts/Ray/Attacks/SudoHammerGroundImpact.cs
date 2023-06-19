@@ -12,7 +12,7 @@ namespace Raydevs.Ray.Attacks
         private const float MaxColliderRadius = 5f;
 
         private int _damage;
-        private float _knockbackForce;
+        private Vector2 _knockbackForce;
         private float _animationTimer;
         private float _scale;
 
@@ -62,7 +62,7 @@ namespace Raydevs.Ray.Attacks
             _enemiesHit.Clear();
         }
 
-        public void OnHit(Vector3 position, int damage, float knockbackForce)
+        public void OnHit(Vector3 position, int damage, Vector2 knockbackForce)
         {
             _transform.position = position;
             _damage = damage;
@@ -76,14 +76,13 @@ namespace Raydevs.Ray.Attacks
 
             if (_enemiesHit.Contains(damageable)) return;
 
-            _impactHandler.HandleEnemyImpact(
-                damageable,
-                CombatUtils.GetDirectionBetweenPoints(
+            DamageInfo damageInfo = new DamageInfo(
+                damageAmount: _damage,
+                attackDirection: CombatUtils.GetDirectionBetweenPoints(
                     RaysPosition,
                     damageable.ObjectTransform.position),
-                _damage,
-                _knockbackForce,
-                false);
+                knockbackForce: _knockbackForce);
+            _impactHandler.HandleEnemyImpact(damageable, damageInfo);
             _enemiesHit.Add(damageable);
         }
 

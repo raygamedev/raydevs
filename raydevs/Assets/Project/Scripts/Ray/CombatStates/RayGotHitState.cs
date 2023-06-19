@@ -1,4 +1,5 @@
 using System.Collections;
+using Raydevs.ScriptableObjects;
 using UnityEngine;
 
 namespace Raydevs.Ray.CombatStates
@@ -7,8 +8,6 @@ namespace Raydevs.Ray.CombatStates
     {
         private const float ColorTransitionDuration = 0.2f;
         private const int ColorTransitionCount = 3;
-        private const float KnockbackXForce = 40f;
-        private const float KnockbackYForce = 15f;
 
         private readonly Color _flashColor = new Color(100f / 255f, 100f / 255f, 100f / 255f); // A darker color.
 
@@ -16,11 +15,14 @@ namespace Raydevs.Ray.CombatStates
 
         private readonly Renderer _renderer;
 
+        private readonly RayCombatStatsSO _combatStats;
+
 
         public RayGotHitState(RayStateMachine currentContext, RayStateFactory stateFactory) : base(currentContext,
             stateFactory)
         {
             _renderer = ctx.GetComponent<Renderer>();
+            _combatStats = ctx.CombatManager.CombatStats;
         }
 
         public override void EnterState(RayStateMachine currentContext, RayStateFactory stateFactory)
@@ -87,7 +89,10 @@ namespace Raydevs.Ray.CombatStates
         public void ApplyKnockback()
         {
             Vector2 knockbackDirection =
-                new Vector2(-ctx.MovementManager.MoveDir * KnockbackXForce, 1f * KnockbackYForce);
+                new Vector2(
+                    -ctx.MovementManager.MoveDir * _combatStats.GotHitKnockbackXForce,
+                    1f * _combatStats.GotHitKnockbackYForce);
+
             ctx.CombatManager.Rigidbody.AddForce(knockbackDirection, ForceMode2D.Impulse);
         }
     }

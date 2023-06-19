@@ -2,9 +2,9 @@ namespace Raydevs.Enemy.EnemyStates
 {
     using System.Collections;
     using UnityEngine;
+
     public class PatrolState : EnemyBaseState
     {
-
         private bool _isFollowingPlayer;
         private bool _coroutineRunning;
         private bool _shouldRest;
@@ -20,7 +20,7 @@ namespace Raydevs.Enemy.EnemyStates
         public override void EnterState(EnemyController currentContext, EnemyStateFactory stateFactory)
         {
             ctx.IsRunning = true;
-            ctx.MoveSpeed = 100f;
+            ctx.CurrentMoveSpeed = ctx.EnemyStats.MoveSpeed;
             ctx.animator.Play("Run");
             ctx.StartCoroutine(ShouldRest());
         }
@@ -37,11 +37,11 @@ namespace Raydevs.Enemy.EnemyStates
 
         public override void CheckSwitchState()
         {
-            if(ctx.EnemyTookDamage)
+            if (ctx.EnemyTookDamage)
                 SwitchState(state.TookDamage());
-            else if(_isFollowingPlayer)
+            else if (_isFollowingPlayer)
                 SwitchState(state.Follow());
-            else if(_shouldRest)
+            else if (_shouldRest)
                 SwitchState(state.Idle());
         }
 
@@ -51,7 +51,7 @@ namespace Raydevs.Enemy.EnemyStates
             {
                 _isFollowingPlayer = true;
             }
-            
+
             HandleBoundaries();
         }
 
@@ -70,19 +70,17 @@ namespace Raydevs.Enemy.EnemyStates
                 distance: 1f,
                 layerMask: LayerMask.GetMask("Ground")).collider != null;
 
-        private void HandleBoundaries() 
+        private void HandleBoundaries()
         {
             if (IsWallHit || !IsGroundHit)
-               ctx.Flip();
+                ctx.Flip();
         }
-        
+
         private IEnumerator ShouldRest()
         {
             float idleTime = Random.Range(1f, 7f);
             yield return new WaitForSeconds(idleTime);
             _shouldRest = true;
         }
-        
     }
-    
 }

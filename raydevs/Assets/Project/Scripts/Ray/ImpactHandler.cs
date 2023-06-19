@@ -12,23 +12,19 @@ namespace Raydevs.Ray
 
         public void HandleEnemyImpact(
             IDamageable enemy,
-            int attackDirection,
-            int damage,
-            float knockback,
-            bool isCritical)
+            DamageInfo damageInfo)
         {
             if (enemy.IsDamageable == false) return;
-            DamageInfo damageInfo = new DamageInfo(damage, attackDirection, knockback);
             enemy.TakeDamage(damageInfo);
             Instantiate(enemyImpactVFX, enemy.ObjectTransform.position, Quaternion.identity);
 
 
-            DamageText damageText = isCritical
+            DamageText damageText = damageInfo.IsCritical
                 ? Instantiate(criticalDamageTextVFX, enemy.ObjectTransform.position, Quaternion.identity)
                     .GetComponent<DamageText>()
                 : Instantiate(damageTextVFX, enemy.ObjectTransform.position, Quaternion.identity)
                     .GetComponent<DamageText>();
-            damageText.SetDamageText(damage, enemy.ObjectTransform.position);
+            damageText.SetDamageText(damageInfo.DamageAmount, enemy.ObjectTransform.position);
         }
     }
 }

@@ -1,22 +1,18 @@
 namespace Raydevs.Enemy
 {
-    using VFX;
+    using ScriptableObjects;
     using Interfaces;
     using System.Collections;
     using UnityEngine;
 
     public class EnemyController : MonoBehaviour, IDamageable
     {
-        [Header("Prefabs")] [SerializeField] private GameObject impactVFX;
-        [SerializeField] private DamageText damageTextVFX;
-        [SerializeField] private DamageText criticalDamageTextVFX;
+        [field: Header("Scriptable Objects")]
+        [field: SerializeField]
+        public EnemySO EnemyStats { get; private set; }
 
-        [SerializeField] private Transform EnemyAttackPoint;
+        [Header("Prefabs")] [SerializeField] private Transform EnemyAttackPoint;
         [SerializeField] private float EnemyAttackRadius;
-        [field: SerializeField] public float AlertDistance { get; private set; } = 3f;
-        [field: SerializeField] public float AttackDistance { get; private set; } = 1f;
-        [field: SerializeField] public int MaxHealth { get; private set; } = 100;
-        [field: SerializeField] public float HitForce { get; private set; } = 5f;
         [field: SerializeField] public float HitForceUp { get; private set; } = 5f;
         [field: SerializeField] public float EnemyStunTime { get; private set; } = 0.5f;
 
@@ -30,7 +26,7 @@ namespace Raydevs.Enemy
 
         public Rigidbody2D Rigidbody { get; private set; }
 
-        public Animator animator;
+        public Animator animator { get; private set; }
         public string CurrentStateName;
 
         private EnemyHealthBar _enemyHealthBar;
@@ -41,7 +37,7 @@ namespace Raydevs.Enemy
 
         public EnemyBaseState CurrentState { get; set; }
         public int Direction { get; set; }
-        public float MoveSpeed { get; set; } = 50f;
+        public float CurrentMoveSpeed { get; set; }
         public bool IsRunning { get; set; }
         public bool EnemyTookDamage { get; set; }
         public bool IsAbleToMove { get; set; } = true;
@@ -51,20 +47,20 @@ namespace Raydevs.Enemy
             Physics2D.Raycast(
                 origin: transform.position,
                 direction: new Vector2(x: Direction, y: 0),
-                distance: AttackDistance,
+                distance: EnemyStats.AttackRange,
                 layerMask: LayerMask.GetMask("Ray"));
 
         public bool RayDetectedCollider =>
             Physics2D.Raycast(
                 origin: transform.position,
                 direction: new Vector2(x: Direction, y: 0),
-                distance: AlertDistance,
+                distance: EnemyStats.AlertDistance,
                 layerMask: LayerMask.GetMask("Ray"));
 
 
         private void Start()
         {
-            _currentHealth = MaxHealth;
+            _currentHealth = EnemyStats.MaxHealth;
             _playerLayerMask = LayerMask.GetMask("Ray");
             _enemyHealthBar = GetComponentInChildren<EnemyHealthBar>();
             Rigidbody = GetComponent<Rigidbody2D>();
@@ -87,7 +83,7 @@ namespace Raydevs.Enemy
         {
             if (IsRunning && IsAbleToMove)
                 Rigidbody.velocity =
-                    new Vector2(Direction * MoveSpeed * Time.deltaTime, Rigidbody.velocity.y);
+                    new Vector2(Direction * CurrentMoveSpeed * Time.deltaTime, Rigidbody.velocity.y);
         }
 
         public void Flip()
@@ -99,7 +95,7 @@ namespace Raydevs.Enemy
                 z: ObjectTransform.localScale.z);
         }
 
-        private float CalculateCurrentHealthPercentage() => (float)_currentHealth / MaxHealth;
+        private float CalculateCurrentHealthPercentage() => (float)_currentHealth / EnemyStats.MaxHealth;
 
         private void FlipEnemyTowardsAttack(int attackDirection)
         {
@@ -108,9 +104,9 @@ namespace Raydevs.Enemy
                 new Vector3(attackDirection, ObjectTransform.localScale.y, ObjectTransform.localScale.z);
         }
 
-        private void KnockBack(float knockback)
+        private void KnockBackEnemy(Vector2 knockbackForce)
         {
-            Rigidbody.AddForce(new Vector2(x: Direction * knockback, y: HitForceUp), ForceMode2D.Impulse);
+            Rigidbody.AddForce(new Vector2(Direction * knockbackForce.x, knockbackForce.y), ForceMode2D.Impulse);
         }
 
 
@@ -145,7 +141,7 @@ namespace Raydevs.Enemy
             if (_currentHealth <= 0)
                 HandleDeath();
             else
-                KnockBack(damageInfo.Knockback);
+                KnockBackEnemy(damageInfo.KnockbackForce);
         }
 
 
@@ -159,22 +155,15 @@ namespace Raydevs.Enemy
 
         public void HandlePlayerMeleeImpact(
             IDamageable player,
-            int damage,
-            float knockback,
-            bool isUseImpactVFX,
-            bool isCritical)
+            DamageInfo damageInfo,
+            bool isUseImpactVFX)
         {
             if (player.IsDamageable == false) return;
-            DamageInfo damageInfo = new DamageInfo(damageAmount: damage, knockback: knockback);
             player.TakeDamage(damageInfo);
             if (isUseImpactVFX)
-                Instantiate(impactVFX, player.ObjectTransform.position, Quaternion.identity);
+                EnemyStats.PlayImpactVFX(player.ObjectTransform.position);
 
-
-            DamageText damageText = isCritical
-                ? Instantiate(criticalDamageTextVFX, player.ObjectTransform.position, Quaternion.identity)
-                : Instantiate(damageTextVFX, player.ObjectTransform.position, Quaternion.identity);
-            damageText.SetDamageText(damage, player.ObjectTransform.position);
+            EnemyStats.PlayDamageTextVFX(damageInfo.DamageAmount, player.ObjectTransform.position);
         }
 
         private void OnTriggerEnter2D(Collider2D player)
@@ -184,8 +173,10 @@ namespace Raydevs.Enemy
             if (IsDead) return;
             if (!player.TryGetComponent(out IDamageable damageable)) return;
 
+            DamageInfo damageInfo = new DamageInfo(EnemyStats.AttackDamage, knockbackForce: EnemyStats.KnockbackForce);
+
             // TODO: Ray add scriptable objects for damage and knockback
-            HandlePlayerMeleeImpact(damageable, 10, 5f, false, false);
+            HandlePlayerMeleeImpact(damageable, damageInfo, false);
         }
 
 
@@ -194,10 +185,12 @@ namespace Raydevs.Enemy
             Collider2D player =
                 Physics2D.OverlapCircle(EnemyAttackPoint.position, EnemyAttackRadius, _playerLayerMask);
             if (player == null) return;
-            if (!player.TryGetComponent(out IDamageable playerDamageable)) return;
+            if (!player.TryGetComponent(out IDamageable damageable)) return;
 
             // TODO: Ray add scriptable objects for damage and knockback
-            HandlePlayerMeleeImpact(playerDamageable, 10, 5f, true, false);
+
+            DamageInfo damageInfo = new DamageInfo(EnemyStats.AttackDamage, knockbackForce: EnemyStats.KnockbackForce);
+            HandlePlayerMeleeImpact(damageable, damageInfo, true);
         }
 
         private void OnDrawGizmos()

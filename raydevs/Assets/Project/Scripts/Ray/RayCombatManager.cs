@@ -172,11 +172,6 @@ namespace Raydevs.Ray
 
         private Vector2 GetMoveDirection() => ObjectTransform.localScale.x > 0 ? Vector2.right : Vector2.left;
 
-        private int GetRandomHitDamage(int range)
-        {
-            return Random.Range(CombatStats.LightAttackDamage, range);
-        }
-
 
         public void OnMoveForward(float force)
         {
@@ -189,7 +184,7 @@ namespace Raydevs.Ray
         }
 
 
-        public void SwordHitFrameEvent(int knockBackForce)
+        public void SwordHitFrameEvent()
         {
             _enemiesHitWithSword.Clear();
             // Using OverlapCircleNonAlloc to efficiently query for enemy collisions in a circular area,
@@ -204,19 +199,21 @@ namespace Raydevs.Ray
                 {
                     if (_enemiesHitWithSword.Contains(damageable)) continue;
 
-                    int randomDamage = GetRandomHitDamage(65);
+                    int randomDamage =
+                        CombatUtils.GetRandomHitDamage(CombatStats.LightAttackDamage, CombatStats.MaxSwordDamage);
                     bool isCriticalHit = IsCriticalHit();
                     if (isCriticalHit)
                         randomDamage *= 2;
 
-                    _impactHandler.HandleEnemyImpact(
-                        damageable,
-                        CombatUtils.GetDirectionBetweenPoints(
+                    DamageInfo damageInfo = new DamageInfo(
+                        damageAmount: randomDamage,
+                        attackDirection: CombatUtils.GetDirectionBetweenPoints(
                             ObjectTransform.position,
                             damageable.ObjectTransform.position),
-                        randomDamage,
-                        knockBackForce,
-                        isCriticalHit);
+                        knockbackForce: CombatStats.SwordAttackKnockbackForce,
+                        isCritical: isCriticalHit);
+
+                    _impactHandler.HandleEnemyImpact(damageable, damageInfo);
                     _enemiesHitWithSword.Add(damageable);
                 }
 
@@ -238,7 +235,11 @@ namespace Raydevs.Ray
                     _groundLayer);
             if (hit)
             {
-                _sudoHammerGroundImpactScript.OnHit(hit.point, 30, 30);
+                _sudoHammerGroundImpactScript.OnHit(
+                    position: hit.point,
+                    damage: CombatUtils.GetRandomHitDamage(CombatStats.SudoAttackDamage,
+                        CombatStats.MaxSudoHammerDamage),
+                    knockbackForce: CombatStats.SudoAttackKnockbackForce);
             }
         }
 

@@ -2,18 +2,21 @@ namespace Raydevs.Enemy.EnemyStates
 {
     using System.Collections;
     using UnityEngine;
-    public class FollowState: EnemyBaseState
+
+    public class FollowState : EnemyBaseState
     {
         private const float FollowPlayerTimer = 3f;
         private bool _isFollowingPlayer;
-        public FollowState(EnemyController currentContext, EnemyStateFactory stateFactory) : base(currentContext, stateFactory)
+
+        public FollowState(EnemyController currentContext, EnemyStateFactory stateFactory) : base(currentContext,
+            stateFactory)
         {
         }
 
         public override void EnterState(EnemyController currentContext, EnemyStateFactory stateFactory)
         {
             ctx.IsRunning = true;
-            ctx.MoveSpeed = 70f;
+            ctx.CurrentMoveSpeed = ctx.EnemyStats.FollowMoveSpeed;
             ctx.animator.Play("Run");
             ctx.StartCoroutine(StopFollowingPlayer());
         }
@@ -30,22 +33,21 @@ namespace Raydevs.Enemy.EnemyStates
 
         public override void CheckSwitchState()
         {
-
-            if(ctx.EnemyTookDamage)
+            if (ctx.EnemyTookDamage)
                 SwitchState(state.TookDamage());
             else if (ctx.IsInAttackRange)
                 SwitchState(state.Attack());
-            else if(!_isFollowingPlayer)
+            else if (!_isFollowingPlayer)
                 SwitchState(state.Patrol());
         }
-        
+
         private IEnumerator StopFollowingPlayer()
         {
             _isFollowingPlayer = true;
             yield return new WaitForSeconds(FollowPlayerTimer);
             _isFollowingPlayer = false;
         }
-        
+
         private void FollowRay()
         {
             Collider2D rayCollider =

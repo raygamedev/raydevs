@@ -13,6 +13,8 @@ namespace Raydevs.ScriptableObjects
         [field: SerializeField] public int AttackDamage { get; private set; }
         [field: SerializeField] public float AttackRange { get; private set; }
         [field: SerializeField] public float AlertDistance { get; private set; }
+        [field: SerializeField] public Vector2 KnockbackForce { get; private set; }
+
         [field: SerializeField] public GameObject ImpactVFX { get; private set; }
         private DamageText _damageText;
 
