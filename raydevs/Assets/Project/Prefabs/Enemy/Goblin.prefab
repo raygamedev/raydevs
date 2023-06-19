@@ -35,6 +35,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 3740616981803180481}
+  - {fileID: 2532212863474439692}
   m_Father: {fileID: 0}
   m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -123,6 +124,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 52a52e69cd73403a880d8406ede21b9d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  impactVFX: {fileID: 0}
+  damageTextVFX: {fileID: 0}
+  criticalDamageTextVFX: {fileID: 0}
+  EnemyAttackPoint: {fileID: 2532212863474439692}
+  EnemyAttackRadius: 0.35
   <AlertDistance>k__BackingField: 3
   <AttackDistance>k__BackingField: 1
   <MaxHealth>k__BackingField: 100
@@ -228,6 +234,37 @@ CapsuleCollider2D:
   m_Offset: {x: -0.14, y: 0}
   m_Size: {x: 0.91, y: 1.46}
   m_Direction: 0
+--- !u!1 &8288443236428206539
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2532212863474439692}
+  m_Layer: 7
+  m_Name: AttackPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2532212863474439692
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8288443236428206539}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 1.179, y: -0.442, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 823446990676677682}
+  m_RootOrder: -1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &5900103461811119804
 PrefabInstance:
   m_ObjectHideFlags: 0
