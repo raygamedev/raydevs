@@ -1,5 +1,8 @@
 namespace Raydevs.Ray
 {
+    using Attacks;
+    using ScriptableObjects;
+    using Utils;
     using System.Collections.Generic;
     using System.Collections;
     using Interfaces;
@@ -9,35 +12,23 @@ namespace Raydevs.Ray
 
     public class RayCombatManager : MonoBehaviour, IDamageable
     {
-        [Header("Dev settings")] public float KnockbackXForce = 10f;
-        public float KnockbackYForce = 5f;
-        [Header("Stats")] [SerializeField] public int LightAttackDamage;
-        [SerializeField] public int SudoAttackDamage;
-        [SerializeField] public float SudoAttackKnockbackForce;
-        [SerializeField] public Vector2 SudoAttackBoxSize;
-        [SerializeField] public float SwordAttackRange;
-        [SerializeField] public float SudoAttackRange;
-        [SerializeField] public float PunchAttackRange;
-        [SerializeField] private float SudoAttackJumpForce = 1000f;
-        [SerializeField] private float CriticalHitChance = 0.2f;
+        [field: Header("Ray Combat Stats")]
+        [field: SerializeField]
+        public RayCombatStatsSO CombatStats { get; private set; }
 
         [Header("Transforms")] [SerializeField]
         private Transform SwordAttackPoint;
 
         [SerializeField] private Transform PunchAttackPoint;
-        [SerializeField] private Transform SudoAttackPoint;
         [SerializeField] private Transform SudoAttackGroundPoint;
 
-        [Header("Prefabs")] [SerializeField] private GameObject sudoHammerGroundImpact;
+        [Header("Prefabs")] [SerializeField] private GameObject sudoHammerGroundImpactPrefab;
 
         [Header("Layers")] [SerializeField] private LayerMask _enemyLayer;
         [SerializeField] private LayerMask _groundLayer;
 
 
-        private const int MAX_ENEMY_SUDO_HAMMER_HITS = 10;
         private const int MAX_ENEMY_SWORD_HITS = 3;
-        private const float AttackTimer = 0.7f;
-        private const float BattleStanceTimer = 5f;
 
         private readonly HashSet<IDamageable> _enemiesHitWithSword = new HashSet<IDamageable>();
 
@@ -47,7 +38,6 @@ namespace Raydevs.Ray
         private Coroutine _battleStanceTimerCoroutine;
 
         private Collider2D[] _swordAttackHits;
-        private Collider2D[] _sudoHammerAttackHits;
 
 
         public Transform ObjectTransform => transform;
@@ -75,6 +65,8 @@ namespace Raydevs.Ray
 
         public Rigidbody2D Rigidbody { get; private set; }
 
+        private SudoHammerGroundImpact _sudoHammerGroundImpactScript;
+
         private void OnEnable()
         {
             InputManager.OnAttackPressed += OnLightAttack;
@@ -85,7 +77,11 @@ namespace Raydevs.Ray
         private void Awake()
         {
             _swordAttackHits = new Collider2D[MAX_ENEMY_SWORD_HITS];
-            _sudoHammerAttackHits = new Collider2D[MAX_ENEMY_SUDO_HAMMER_HITS];
+            (sudoHammerGroundImpactPrefab, _sudoHammerGroundImpactScript) =
+                GameObjectUtils.InstantiateAndGetComponent<SudoHammerGroundImpact>(
+                    sudoHammerGroundImpactPrefab,
+                    ObjectTransform.position);
+            _sudoHammerGroundImpactScript.Initialize(ObjectTransform.position);
         }
 
         private void Start()
@@ -93,7 +89,6 @@ namespace Raydevs.Ray
             Rigidbody = GetComponent<Rigidbody2D>();
             _impactHandler = GetComponent<ImpactHandler>();
         }
-
 
         private void Update()
         {
@@ -163,7 +158,7 @@ namespace Raydevs.Ray
         private IEnumerator AttackCooldownTimer()
         {
             IsAttackTimerEnded = false;
-            yield return new WaitForSeconds(AttackTimer);
+            yield return new WaitForSeconds(CombatStats.AttackTimer);
             IsAttackTimerEnded = true;
             FollowUpAttack = false;
         }
@@ -171,7 +166,7 @@ namespace Raydevs.Ray
         private IEnumerator BattleStanceCooldownTimer()
         {
             IsInBattleStance = true;
-            yield return new WaitForSeconds(BattleStanceTimer);
+            yield return new WaitForSeconds(CombatStats.BattleStanceTimer);
             IsInBattleStance = false;
         }
 
@@ -179,7 +174,7 @@ namespace Raydevs.Ray
 
         private int GetRandomHitDamage(int range)
         {
-            return Random.Range(LightAttackDamage, range);
+            return Random.Range(CombatStats.LightAttackDamage, range);
         }
 
 
@@ -190,7 +185,7 @@ namespace Raydevs.Ray
 
         public void OnSudoAttackMiniJumpFrameEvent(float force)
         {
-            Rigidbody.AddForce(Vector2.up * SudoAttackJumpForce, ForceMode2D.Force);
+            Rigidbody.AddForce(Vector2.up * CombatStats.SudoAttackJumpForce, ForceMode2D.Force);
         }
 
 
@@ -200,7 +195,8 @@ namespace Raydevs.Ray
             // Using OverlapCircleNonAlloc to efficiently query for enemy collisions in a circular area,
             // populating a pre-allocated array with the results to minimize garbage collection and improve performance
             // _swordAttackHits is a pre-allocated array of size MAX_ENEMY_SWORD_HITS
-            int numHits = Physics2D.OverlapCircleNonAlloc(SwordAttackPoint.position, SwordAttackRange, _swordAttackHits,
+            int numHits = Physics2D.OverlapCircleNonAlloc(SwordAttackPoint.position, CombatStats.SwordAttackRange,
+                _swordAttackHits,
                 _enemyLayer);
             for (int i = 0; i < numHits; i++)
             {
@@ -228,37 +224,21 @@ namespace Raydevs.Ray
             }
         }
 
-        public bool IsCriticalHit() => Random.Range(0f, 1f) < CriticalHitChance;
+        public bool IsCriticalHit() => Random.Range(0f, 1f) < CombatStats.CriticalHitChance;
 
 
-        public void SudoHitFrameEvent(int knockBackForce)
+        public void SudoHitFrameEvent()
         {
-            RaycastHit2D hit = Physics2D.CircleCast(SudoAttackGroundPoint.position, SudoAttackRange, Vector2.zero, 0,
-                _groundLayer);
-
+            RaycastHit2D hit =
+                Physics2D.CircleCast(
+                    SudoAttackGroundPoint.position,
+                    CombatStats.SudoAttackRange,
+                    Vector2.zero,
+                    0,
+                    _groundLayer);
             if (hit)
             {
-                Instantiate(
-                    sudoHammerGroundImpact,
-                    hit.point,
-                    Quaternion.identity,
-                    transform
-                );
-            }
-
-            // Using OverlapCircleNonAlloc to efficiently query for enemy collisions in a circular area,
-            // populating a pre-allocated array with the results to minimize garbage collection and improve performance
-            // _sudoHammerAttackHits is a pre-allocated array of size MAX_ENEMY_SUDO_HAMMER_HITS
-            int numHits = Physics2D.OverlapBoxNonAlloc(SudoAttackPoint.position, SudoAttackBoxSize, 0,
-                _sudoHammerAttackHits, _enemyLayer);
-            for (int i = 0; i < numHits; i++)
-            {
-                if (_sudoHammerAttackHits[i].TryGetComponent(out IDamageable damageable))
-                {
-                    _impactHandler.HandleEnemyImpact(damageable, 1, 30, knockBackForce, false);
-                }
-
-                _sudoHammerAttackHits[i] = null;
+                _sudoHammerGroundImpactScript.OnHit(hit.point, 30, 30);
             }
         }
 
@@ -275,6 +255,16 @@ namespace Raydevs.Ray
         {
             RayGotHit = true;
             Debug.Log("Player took damage");
+        }
+
+        private void OnDrawGizmosSelected()
+        {
+            Gizmos.color = Color.red;
+            Gizmos.DrawWireSphere(PunchAttackPoint.position, CombatStats.PunchAttackRange);
+            Gizmos.color = Color.green;
+            Gizmos.DrawWireSphere(SudoAttackGroundPoint.position, CombatStats.SudoAttackRange);
+            // Gizmos.color = Color.blue;
+            // Gizmos.DrawWireCube(SudoAttackEnemyPoint.position, CombatStats.SudoAttackBoxSize);
         }
     }
 }
