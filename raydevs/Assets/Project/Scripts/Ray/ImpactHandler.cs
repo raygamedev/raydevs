@@ -83,7 +83,6 @@ namespace Raydevs.Ray
         {
             GameObject activeImpactVFX = null;
             GameObject activeDamageText = null;
-            // GameObject activeCritDamageText = null;
 
             foreach (ImpactPoolItem item in _impactPool)
             {

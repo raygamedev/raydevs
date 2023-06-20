@@ -51,12 +51,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8adfd4ea87154e6aa06b602cc3e0a723, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _textMeshPro: {fileID: 2464753633538803584}
-  destroyTime: 1
-  fadeTime: 0.5
-  moveSpeed: 0.3
-  spawnOffset: {x: 0.5, y: 1}
-  moveDirection: {x: 1, y: 1}
+  <DamageTextSo>k__BackingField: {fileID: 11400000, guid: bbea21e531e464a479fbb4a3df0274aa, type: 2}
 --- !u!23 &8608114289121325299
 MeshRenderer:
   m_ObjectHideFlags: 0

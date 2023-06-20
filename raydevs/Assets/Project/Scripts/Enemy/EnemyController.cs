@@ -38,9 +38,11 @@ namespace Raydevs.Enemy
         private EnemyStateFactory _states;
         private Coroutine _stunCoroutine;
         private int _currentHealth;
-        private GameObject _damageTextVFX;
+
         private GameObject _impactVFXPrefab;
         private ImpactVFX _impactVFXScript;
+
+        private DamageText _damageTextScript;
 
         public EnemyBaseState CurrentState { get; set; }
         public int Direction { get; set; }
@@ -67,7 +69,9 @@ namespace Raydevs.Enemy
         private void Awake()
         {
             (_impactVFXPrefab, _impactVFXScript) =
-                GameObjectUtils.InstantiateAndGetComponent<ImpactVFX>(EnemyStats.ImpactVFX, transform.position);
+                GameObjectUtils.InstantiateAndGetComponent<ImpactVFX>(prefab: EnemyStats.ImpactVFX, parent: transform);
+            (_, _damageTextScript) = GameObjectUtils.InstantiateAndGetComponent<DamageText>(
+                prefab: Resources.Load<GameObject>("EnemyDamageTextVFX"));
             _impactVFXPrefab.SetActive(false);
         }
 
@@ -176,10 +180,7 @@ namespace Raydevs.Enemy
             player.TakeDamage(damageInfo);
             if (isUseImpactVFX)
                 _impactVFXScript.PlayImpactVFX(player.ObjectTransform.position);
-            // if (isUseImpactVFX)
-            //     EnemyStats.PlayImpactVFX(player.ObjectTransform.position);
-            //
-            // EnemyStats.PlayDamageTextVFX(damageInfo.DamageAmount, player.ObjectTransform.position);
+            _damageTextScript.PlayDamageText(damageInfo.DamageAmount, player.ObjectTransform.position);
         }
 
         private void OnTriggerEnter2D(Collider2D player)
@@ -192,7 +193,7 @@ namespace Raydevs.Enemy
             DamageInfo damageInfo = new DamageInfo(EnemyStats.AttackDamage, knockbackForce: EnemyStats.KnockbackForce);
 
             // TODO: Ray add scriptable objects for damage and knockback
-            HandlePlayerMeleeImpact(damageable, damageInfo, false);
+            HandlePlayerMeleeImpact(damageable, damageInfo, true);
         }
 
 
