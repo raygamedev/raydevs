@@ -1,13 +1,18 @@
+using Cinemachine;
+
 namespace Raydevs.Ray
 {
     using UnityEngine;
+
     public class RayStateMachine : MonoBehaviour
     {
-        [SerializeField] public RayMovementManager MovementManager;
-        [SerializeField] public RayCombatManager CombatManager;
-        [SerializeField] public RayInteractManager InteractManager;
-        [SerializeField] public Animator RayAnimator;
-        private RayBaseState _currentState;
+        [field: SerializeField] public RayMovementManager MovementManager { get; private set; }
+        [field: SerializeField] public RayCombatManager CombatManager { get; private set; }
+        [field: SerializeField] public RayHealthManager HealthManager { get; private set; }
+        [field: SerializeField] public RayInteractManager InteractManager { get; private set; }
+        [field: SerializeField] public Animator RayAnimator { get; private set; }
+        [field: SerializeField] public CinemachineVirtualCamera CinemachineVirtualCamera { get; private set; }
+        [SerializeField] private RayBaseState _currentState;
         private RayStateFactory _states;
 
         public string CurrentStateName;

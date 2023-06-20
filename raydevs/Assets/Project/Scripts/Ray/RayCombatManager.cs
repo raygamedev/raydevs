@@ -1,5 +1,3 @@
-using System;
-
 namespace Raydevs.Ray
 {
     using Attacks;
@@ -12,7 +10,7 @@ namespace Raydevs.Ray
     using UnityEngine.InputSystem;
     using Random = UnityEngine.Random;
 
-    public class RayCombatManager : MonoBehaviour, IDamageable
+    public class RayCombatManager : MonoBehaviour
     {
         [field: Header("Ray Combat Stats")]
         [field: SerializeField]
@@ -23,6 +21,7 @@ namespace Raydevs.Ray
 
         [SerializeField] private Transform PunchAttackPoint;
         [SerializeField] private Transform SudoAttackGroundPoint;
+
 
         [Header("Prefabs")] [SerializeField] private GameObject sudoHammerGroundImpactPrefab;
 
@@ -44,7 +43,6 @@ namespace Raydevs.Ray
 
         public Transform ObjectTransform => transform;
 
-        public bool IsDamageable { get; set; } = true;
 
         public bool HasSword { get; set; } = true;
         public bool HasSudoHammer { get; set; } = true;
@@ -53,7 +51,7 @@ namespace Raydevs.Ray
         public bool IsLightAttackPerformed { get; set; }
         public bool IsSudoAttackPerformed { get; set; }
         public bool IsReactAttackPerformed { get; set; }
-        public bool shouldEnterCombatState;
+        public bool ShouldEnterCombatState { get; private set; }
         public bool IsAnimationEnded { get; set; }
 
         public bool IsInBattleStance { get; set; }
@@ -63,7 +61,6 @@ namespace Raydevs.Ray
 
         public int PressCounter { get; set; }
 
-        public bool RayGotHit { get; set; }
 
         public Rigidbody2D Rigidbody { get; private set; }
 
@@ -94,8 +91,8 @@ namespace Raydevs.Ray
 
         private void Update()
         {
-            shouldEnterCombatState =
-                RayGotHit || IsLightAttackPerformed || IsSudoAttackPerformed || IsReactAttackPerformed;
+            ShouldEnterCombatState =
+                IsLightAttackPerformed || IsSudoAttackPerformed || IsReactAttackPerformed;
             if (ComboFinished) PressCounter = 0;
         }
 
@@ -254,11 +251,6 @@ namespace Raydevs.Ray
             // _impactHandler.HandleEnemyImpact(enemy, randomDamage, knockBackForce, false);
         }
 
-        public void TakeDamage(DamageInfo damageInfo)
-        {
-            RayGotHit = true;
-            Debug.Log("Player took damage");
-        }
 
         private void OnDrawGizmosSelected()
         {

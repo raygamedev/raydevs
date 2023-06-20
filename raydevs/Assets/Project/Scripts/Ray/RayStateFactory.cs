@@ -26,6 +26,8 @@ namespace Raydevs.Ray
 
         public RayBaseState GotHit() => new RayGotHitState(_context, this);
 
+        public RayBaseState Deado() => new RayDeadState(_context, this);
+
         public RayBaseState BattleStance() => new RayBattleStanceState(_context, this);
 
         public RayBaseState LightAttackOne() => new RayLightAttackOneState(_context, this);

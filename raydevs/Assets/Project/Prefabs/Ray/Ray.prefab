@@ -42,6 +42,7 @@ GameObject:
   - component: {fileID: 1592565834158962430}
   - component: {fileID: 3202208808158419872}
   - component: {fileID: 7594184412488446233}
+  - component: {fileID: 2302701683548501251}
   - component: {fileID: 7046419015363725952}
   - component: {fileID: 5235619567238925784}
   - component: {fileID: 6061048741181550318}
@@ -113,7 +114,49 @@ MonoBehaviour:
   _groundLayer:
     serializedVersion: 2
     m_Bits: 64
-  shouldEnterCombatState: 0
+--- !u!114 &2302701683548501251
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1592565834158962304}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0f6a5bdbb42d4877bfcae0fe17296c64, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  RayGotHitEvent:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 0}
+        m_TargetAssemblyTypeName: Raydevs.UI.PlayerUI.HealthbarManager, Raydevs
+        m_MethodName: SetHealth
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  SetMaxHealthEvent:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 0}
+        m_TargetAssemblyTypeName: Raydevs.UI.PlayerUI.HealthbarManager, Raydevs
+        m_MethodName: SetMaxHealth
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  <CombatStats>k__BackingField: {fileID: 11400000, guid: cda367f6d238f4d3ea439cc31ff58d1a, type: 2}
 --- !u!114 &7046419015363725952
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -139,10 +182,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc111ab171ab4e23adb6b6e85b74bfd8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MovementManager: {fileID: 3202208808158419872}
-  CombatManager: {fileID: 7594184412488446233}
-  InteractManager: {fileID: 7046419015363725952}
-  RayAnimator: {fileID: 1592565834158962431}
+  <MovementManager>k__BackingField: {fileID: 3202208808158419872}
+  <CombatManager>k__BackingField: {fileID: 7594184412488446233}
+  <HealthManager>k__BackingField: {fileID: 2302701683548501251}
+  <InteractManager>k__BackingField: {fileID: 7046419015363725952}
+  <RayAnimator>k__BackingField: {fileID: 1592565834158962431}
+  <CinemachineVirtualCamera>k__BackingField: {fileID: 0}
   CurrentStateName: 
 --- !u!114 &6061048741181550318
 MonoBehaviour:

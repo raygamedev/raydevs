@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: RayCombatStats
   m_EditorClassIdentifier: 
   <MaxHealth>k__BackingField: 100
-  <CriticalHitChance>k__BackingField: 1
+  <CriticalHitChance>k__BackingField: 0.2
   <GotHitKnockbackXForce>k__BackingField: 30
   <GotHitKnockbackYForce>k__BackingField: 10
   <AttackTimer>k__BackingField: 0.7
@@ -21,7 +21,7 @@ MonoBehaviour:
   <LightAttackDamage>k__BackingField: 30
   <MaxSwordDamage>k__BackingField: 100
   <SwordAttackRange>k__BackingField: 1
-  <SwordAttackKnockbackForce>k__BackingField: {x: 0, y: 0}
+  <SwordAttackKnockbackForce>k__BackingField: {x: 10, y: 3}
   <PunchAttackRange>k__BackingField: 0.43
   <SudoAttackDamage>k__BackingField: 30
   <MaxSudoHammerDamage>k__BackingField: 100

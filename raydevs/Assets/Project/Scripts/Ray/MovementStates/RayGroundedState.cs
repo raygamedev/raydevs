@@ -23,7 +23,7 @@ namespace Raydevs.Ray.MovementStates
 
         public override void CheckSwitchState()
         {
-            if (ctx.CombatManager.shouldEnterCombatState)
+            if (ctx.CombatManager.ShouldEnterCombatState || ctx.HealthManager.RayGotHit)
                 SwitchState(state.Combat());
             else if (ctx.MovementManager.IsJumpPerformed)
                 SwitchState(state.Jump());
