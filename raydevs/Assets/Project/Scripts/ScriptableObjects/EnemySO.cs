@@ -22,17 +22,5 @@ namespace Raydevs.ScriptableObjects
         {
             _damageText = Resources.Load<DamageText>("EnemyDamageTextVFX");
         }
-
-        public void PlayDamageTextVFX(int damage, Vector3 position)
-        {
-            DamageText dmgText = Instantiate(_damageText, position, Quaternion.identity);
-            dmgText.SetDamageText(damage, position);
-        }
-
-
-        public void PlayImpactVFX(Vector3 position)
-        {
-            Instantiate(ImpactVFX, position, Quaternion.identity);
-        }
     }
 }

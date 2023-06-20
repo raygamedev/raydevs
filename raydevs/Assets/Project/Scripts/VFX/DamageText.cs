@@ -1,4 +1,5 @@
-using UnityEngine.UI;
+using Raydevs.ScriptableObjects;
+using UnityEngine.Serialization;
 
 namespace Raydevs.VFX
 {
@@ -9,29 +10,52 @@ namespace Raydevs.VFX
 
     public class DamageText : MonoBehaviour
     {
-        [SerializeField] private TextMeshPro _textMeshPro;
-        [SerializeField] private float destroyTime;
-        [SerializeField] private float fadeTime;
-        [SerializeField] private float moveSpeed;
-        [SerializeField] private Vector2 spawnOffset;
-        [SerializeField] private Vector2 moveDirection;
-        [SerializeField] private SpriteRenderer criticalHitIcon;
+        [field: SerializeField] private DamageTextSO DamageTextSo { get; set; }
+
+        private SpriteRenderer _criticalHitIcon;
+
+        private TextMeshPro _textMeshPro;
 
         private Vector3 _randomOffset;
+        private Color _originalColor;
+        private Color _criticalHitIconOriginalColor;
         private bool _isCriticalHitIconNotNull;
+        private Transform _transform;
 
-        private void Start()
+        private IEnumerator DisableOnEnd(float time)
         {
-            _isCriticalHitIconNotNull = criticalHitIcon != null;
-            Destroy(gameObject, destroyTime);
+            yield return new WaitForSeconds(time); // Wait for the length of the animation
+            _textMeshPro.color = _originalColor;
+            if (_isCriticalHitIconNotNull)
+                _criticalHitIcon.color = _criticalHitIconOriginalColor;
+            gameObject.SetActive(false); // Disable GameObject
+        }
+
+        private void Awake()
+        {
+            _textMeshPro = GetComponent<TextMeshPro>();
+            _criticalHitIcon = GetComponentInChildren<SpriteRenderer>();
+            _transform = transform;
+            _isCriticalHitIconNotNull = _criticalHitIcon != null;
+            _criticalHitIconOriginalColor = _isCriticalHitIconNotNull ? _criticalHitIcon.color : default;
+            _originalColor = _textMeshPro.color;
+        }
+
+
+        public void PlayDamageText(int damageAmount, Vector3 position)
+        {
             // Randomize spawn position
-            Vector3 randomizedSpawnPosition = transform.position + new Vector3(
-                Random.Range(0, spawnOffset.x),
-                Random.Range(0.5f, spawnOffset.y),
+            Vector3 randomizedSpawnPosition = position + new Vector3(
+                Random.Range(DamageTextSo.SpawnOffset.x, DamageTextSo.SpawnOffsetMaxRange.x),
+                Random.Range(DamageTextSo.SpawnOffset.y, DamageTextSo.SpawnOffsetMaxRange.y),
                 0);
-            transform.position = randomizedSpawnPosition;
+            _transform.position = randomizedSpawnPosition;
 
             // Start fading out and moving the text when the object is created
+
+            _textMeshPro.SetText(damageAmount.ToString());
+            gameObject.SetActive(true);
+            StartCoroutine(DisableOnEnd(DamageTextSo.DestroyTime));
             StartCoroutine(FadeAndMoveText());
         }
 
@@ -43,35 +67,30 @@ namespace Raydevs.VFX
 
         private IEnumerator FadeAndMoveText()
         {
-            Color originalColor = _textMeshPro.color;
-            Color originalIconColor =
-                _isCriticalHitIconNotNull
-                    ? criticalHitIcon.color
-                    : default; // Capture the original color of the critical hit icon if it's present
-
             float elapsed = 0f;
 
-            while (elapsed < 0.3f) // Move for 0.3 seconds before starting fade
+            while (elapsed < DamageTextSo.DelayFadeTime) // Move for 0.3 seconds before starting fade
             {
                 elapsed += Time.deltaTime;
                 // Only move the text in the given direction
-                transform.position += (Vector3)(moveDirection.normalized * (moveSpeed * Time.deltaTime));
+                _transform.position +=
+                    (Vector3)(DamageTextSo.MoveDirection.normalized * (DamageTextSo.MoveSpeed * Time.deltaTime));
                 yield return null; // Wait for the next frame
             }
 
             elapsed = 0f; // Reset elapsed time for the fade
 
-            while (elapsed < fadeTime)
+            while (elapsed < DamageTextSo.FadeTime)
             {
                 elapsed += Time.deltaTime;
-                float normalizedTime = elapsed / fadeTime;
+                float normalizedTime = elapsed / DamageTextSo.FadeTime;
 
                 // Use normalized time to linearly interpolate the color's alpha value
                 Color newColor = new Color(
-                    originalColor.r,
-                    originalColor.g,
-                    originalColor.b,
-                    Mathf.Lerp(originalColor.a, 0f, normalizedTime));
+                    _originalColor.r,
+                    _originalColor.g,
+                    _originalColor.b,
+                    Mathf.Lerp(_originalColor.a, 0f, normalizedTime));
 
                 _textMeshPro.color = newColor;
 
@@ -79,16 +98,17 @@ namespace Raydevs.VFX
                 if (_isCriticalHitIconNotNull)
                 {
                     Color newIconColor = new Color(
-                        originalIconColor.r,
-                        originalIconColor.g,
-                        originalIconColor.b,
-                        Mathf.Lerp(originalIconColor.a, 0f, normalizedTime));
+                        _criticalHitIconOriginalColor.r,
+                        _criticalHitIconOriginalColor.g,
+                        _criticalHitIconOriginalColor.b,
+                        Mathf.Lerp(_criticalHitIconOriginalColor.a, 0f, normalizedTime));
 
-                    criticalHitIcon.color = newIconColor;
+                    _criticalHitIcon.color = newIconColor;
                 }
 
                 // Continue moving the text in the given direction
-                transform.position += (Vector3)(moveDirection.normalized * (moveSpeed * Time.deltaTime));
+                _transform.position +=
+                    (Vector3)(DamageTextSo.MoveDirection.normalized * (DamageTextSo.MoveSpeed * Time.deltaTime));
 
                 yield return null; // Wait for the next frame
             }

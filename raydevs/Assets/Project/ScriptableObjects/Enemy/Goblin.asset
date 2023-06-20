@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 26d25ddf31b449eabe05a0a00cc8b175, type: 3}
   m_Name: Goblin
   m_EditorClassIdentifier: 
-  <MaxHealth>k__BackingField: 300
-  <MoveSpeed>k__BackingField: 50
+  <MaxHealth>k__BackingField: 30000
+  <MoveSpeed>k__BackingField: 0
   <FollowMoveSpeed>k__BackingField: 70
   <AttackDamage>k__BackingField: 108
   <AttackRange>k__BackingField: 1

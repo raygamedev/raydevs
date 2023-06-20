@@ -83,13 +83,13 @@ namespace Raydevs.Ray
                 GameObjectUtils.InstantiateAndGetComponent<SudoHammerGroundImpact>(
                     sudoHammerGroundImpactPrefab,
                     ObjectTransform.position);
-            _sudoHammerGroundImpactScript.Initialize(transform);
         }
 
         private void Start()
         {
             Rigidbody = GetComponent<Rigidbody2D>();
             _impactHandler = GetComponent<ImpactHandler>();
+            _sudoHammerGroundImpactScript.Initialize(transform, _impactHandler);
         }
 
         private void Update()

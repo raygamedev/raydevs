@@ -24,15 +24,15 @@ namespace Raydevs.Ray.Attacks
 
         private readonly HashSet<IDamageable> _enemiesHit = new HashSet<IDamageable>();
 
-        public void Initialize(Transform raysTransform)
+        public void Initialize(Transform raysTransform, ImpactHandler impactHandler)
         {
             RaysTransform = raysTransform;
+            _impactHandler = impactHandler;
         }
 
         private void Awake()
         {
             _circleCollider = GetComponent<CircleCollider2D>();
-            _impactHandler = GetComponent<ImpactHandler>();
             _animator = GetComponent<Animator>();
             _transform = transform;
         }

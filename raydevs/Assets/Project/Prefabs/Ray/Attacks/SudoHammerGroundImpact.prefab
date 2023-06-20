@@ -9,7 +9,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 18754925982476775}
-  - component: {fileID: -3115695990094935569}
   - component: {fileID: 2463916369835721390}
   - component: {fileID: -1415788032821343219}
   - component: {fileID: 2470568723634346177}
@@ -36,21 +35,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &-3115695990094935569
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4192835255103215395}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1c9704c342944eefa7b3502eefb5f7d2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  enemyImpactVFX: {fileID: 7887563744919019096, guid: d9e4f52c301bb4cb6994bef63de85f7d, type: 3}
-  damageTextVFX: {fileID: 9189677441209755910, guid: 87c466f6aaf944df9ae9500cf4743104, type: 3}
-  criticalDamageTextVFX: {fileID: 9189677441209755910, guid: acbe72b652d31419a83718e87dd3a3b7, type: 3}
 --- !u!114 &2463916369835721390
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -160,14 +144,14 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 1
-  m_Sprite: {fileID: 0}
+  m_Sprite: {fileID: -263692850, guid: 2bed8ce83c5ad4deba44013bb807ee91, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 8.781222, y: 5.6769233}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 0
+  m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0

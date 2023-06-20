@@ -4,10 +4,34 @@ namespace Raydevs.Utils
 
     public static class GameObjectUtils
     {
+        public static GameObject InstantiateGameObject(GameObject prefab)
+        {
+            // Instantiate the prefab under the parent transform
+            GameObject instance = Object.Instantiate(prefab);
+
+            // Set the instance to inactive initially
+            instance.SetActive(false);
+
+            // Return the instantiated GameObject
+            return instance;
+        }
+
         public static GameObject InstantiateGameObject(GameObject prefab, Vector3 position)
         {
             // Instantiate the prefab under the parent transform
             GameObject instance = Object.Instantiate(prefab, position, Quaternion.identity);
+
+            // Set the instance to inactive initially
+            instance.SetActive(false);
+
+            // Return the instantiated GameObject
+            return instance;
+        }
+
+        public static GameObject InstantiateGameObject(GameObject prefab, Transform parent)
+        {
+            // Instantiate the prefab under the parent transform
+            GameObject instance = Object.Instantiate(prefab, parent);
 
             // Set the instance to inactive initially
             instance.SetActive(false);
@@ -33,6 +57,44 @@ namespace Raydevs.Utils
 
             // Return the instantiated GameObject
             return instance;
+        }
+
+        public static (GameObject, T) InstantiateAndGetComponent<T>(GameObject prefab)
+            where T : Component
+        {
+            // Instantiate the prefab under the parent transform
+            GameObject instance = InstantiateGameObject(prefab);
+
+            // Get the component of the type specified
+            T component = instance.GetComponent<T>();
+
+            if (component == null)
+            {
+                Debug.LogWarning(
+                    $"The instantiated GameObject {prefab.name} does not contain a component of type {typeof(T).Name}. Returning null for the component.");
+            }
+
+            // Return both the instantiated GameObject and its component
+            return (instance, component);
+        }
+
+        public static (GameObject, T) InstantiateAndGetComponent<T>(GameObject prefab, Transform parent)
+            where T : Component
+        {
+            // Instantiate the prefab under the parent transform
+            GameObject instance = InstantiateGameObject(prefab, parent);
+
+            // Get the component of the type specified
+            T component = instance.GetComponent<T>();
+
+            if (component == null)
+            {
+                Debug.LogWarning(
+                    $"The instantiated GameObject {prefab.name} does not contain a component of type {typeof(T).Name}. Returning null for the component.");
+            }
+
+            // Return both the instantiated GameObject and its component
+            return (instance, component);
         }
 
         /// <summary>

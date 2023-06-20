@@ -180,8 +180,12 @@ PrefabInstance:
       value: EnemySpawner
       objectReference: {fileID: 0}
     - target: {fileID: 8335783907783064797, guid: cd6b02e8e9a124943baef25571e487d3, type: 3}
-      propertyPath: _spawnOnStart
+      propertyPath: m_Enabled
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8335783907783064797, guid: cd6b02e8e9a124943baef25571e487d3, type: 3}
+      propertyPath: _spawnOnStart
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -477,26 +481,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 3202208808158419872, guid: f73a8306233684069a15fcdca7b6d721, type: 3}
-      propertyPath: <MovementStats>k__BackingField
-      value: 
-      objectReference: {fileID: 11400000, guid: 40b1c89704fd048b885047d98b82ce4c, type: 2}
-    - target: {fileID: 6061048741181550318, guid: f73a8306233684069a15fcdca7b6d721, type: 3}
-      propertyPath: damageTextVFX
-      value: 
-      objectReference: {fileID: 9189677441209755910, guid: 87c466f6aaf944df9ae9500cf4743104, type: 3}
     - target: {fileID: 6061048741181550318, guid: f73a8306233684069a15fcdca7b6d721, type: 3}
       propertyPath: criticalDamageTextVFX
       value: 
-      objectReference: {fileID: 9189677441209755910, guid: acbe72b652d31419a83718e87dd3a3b7, type: 3}
-    - target: {fileID: 7594184412488446233, guid: f73a8306233684069a15fcdca7b6d721, type: 3}
-      propertyPath: <CombatStats>k__BackingField
-      value: 
-      objectReference: {fileID: 11400000, guid: cda367f6d238f4d3ea439cc31ff58d1a, type: 2}
-    - target: {fileID: 7594184412488446233, guid: f73a8306233684069a15fcdca7b6d721, type: 3}
-      propertyPath: sudoHammerGroundImpactPrefab
-      value: 
-      objectReference: {fileID: 4192835255103215395, guid: 1a4252612bd4943bfab1fc790c1f786a, type: 3}
+      objectReference: {fileID: 3716838217396533459, guid: acbe72b652d31419a83718e87dd3a3b7, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

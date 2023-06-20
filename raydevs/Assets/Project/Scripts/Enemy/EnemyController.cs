@@ -1,3 +1,7 @@
+using System;
+using Raydevs.Utils;
+using Raydevs.VFX;
+
 namespace Raydevs.Enemy
 {
     using ScriptableObjects;
@@ -34,6 +38,9 @@ namespace Raydevs.Enemy
         private EnemyStateFactory _states;
         private Coroutine _stunCoroutine;
         private int _currentHealth;
+        private GameObject _damageTextVFX;
+        private GameObject _impactVFXPrefab;
+        private ImpactVFX _impactVFXScript;
 
         public EnemyBaseState CurrentState { get; set; }
         public int Direction { get; set; }
@@ -56,6 +63,13 @@ namespace Raydevs.Enemy
                 direction: new Vector2(x: Direction, y: 0),
                 distance: EnemyStats.AlertDistance,
                 layerMask: LayerMask.GetMask("Ray"));
+
+        private void Awake()
+        {
+            (_impactVFXPrefab, _impactVFXScript) =
+                GameObjectUtils.InstantiateAndGetComponent<ImpactVFX>(EnemyStats.ImpactVFX, transform.position);
+            _impactVFXPrefab.SetActive(false);
+        }
 
 
         private void Start()
@@ -161,9 +175,11 @@ namespace Raydevs.Enemy
             if (player.IsDamageable == false) return;
             player.TakeDamage(damageInfo);
             if (isUseImpactVFX)
-                EnemyStats.PlayImpactVFX(player.ObjectTransform.position);
-
-            EnemyStats.PlayDamageTextVFX(damageInfo.DamageAmount, player.ObjectTransform.position);
+                _impactVFXScript.PlayImpactVFX(player.ObjectTransform.position);
+            // if (isUseImpactVFX)
+            //     EnemyStats.PlayImpactVFX(player.ObjectTransform.position);
+            //
+            // EnemyStats.PlayDamageTextVFX(damageInfo.DamageAmount, player.ObjectTransform.position);
         }
 
         private void OnTriggerEnter2D(Collider2D player)
