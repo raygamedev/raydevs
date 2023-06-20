@@ -16,6 +16,7 @@ namespace Raydevs.Ray.CombatStates
         private readonly Renderer _renderer;
 
         private readonly RayCombatStatsSO _combatStats;
+        private bool _isRayDeado;
 
 
         public RayGotHitState(RayStateMachine currentContext, RayStateFactory stateFactory) : base(currentContext,
@@ -29,8 +30,9 @@ namespace Raydevs.Ray.CombatStates
         {
             ctx.HealthManager.IsDamageable = false;
             ApplyKnockback();
-            if (ctx.HealthManager.RayCurrentHealth <= 0)
+            if ( ctx.HealthManager.RayCurrentHealth <= 0)
             {
+                _isRayDeado = true;
                 SwitchState(state.Deado());
                 return;
             }
@@ -52,6 +54,7 @@ namespace Raydevs.Ray.CombatStates
 
         public override void CheckSwitchState()
         {
+            if(_isRayDeado) return;
             if (ctx.MovementManager.IsAbleToMove)
                 SwitchState(state.Combat());
         }

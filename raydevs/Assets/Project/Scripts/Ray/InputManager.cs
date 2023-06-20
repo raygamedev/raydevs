@@ -15,6 +15,11 @@ namespace Raydevs.Ray
             _rayInput.Enable();
         }
 
+        public static void DisableInput()
+        {
+            _rayInput.Disable();
+        }
+
         // Event when the Jump button is pressed
         public static event Action<InputAction.CallbackContext> OnJumpPressed
         {

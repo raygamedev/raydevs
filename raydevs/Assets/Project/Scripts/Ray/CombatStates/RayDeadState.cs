@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 namespace Raydevs.Ray.CombatStates
@@ -11,8 +12,11 @@ namespace Raydevs.Ray.CombatStates
 
         public override void EnterState(RayStateMachine currentContext, RayStateFactory stateFactory)
         {
-            ctx.CinemachineVirtualCamera.Follow = null;
+            ctx.RayAnimator.Play("RayDeado");
+            ctx.GetComponent<Rigidbody2D>().AddForce(new Vector2(700f, 10f), ForceMode2D.Impulse);
             ctx.GetComponent<BoxCollider2D>().isTrigger = true;
+            ctx.StartCoroutine(StopFollow());
+            InputManager.DisableInput();
         }
 
         public override void UpdateState(RayStateMachine currentContext, RayStateFactory stateFactory)
@@ -25,6 +29,12 @@ namespace Raydevs.Ray.CombatStates
 
         public override void CheckSwitchState()
         {
+        }
+
+        private IEnumerator StopFollow()
+        {
+            yield return new WaitForSeconds(1f);
+            ctx.CinemachineVirtualCamera.Follow = null;
         }
     }
 }
