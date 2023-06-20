@@ -1,9 +1,7 @@
-using TMPro;
-using UnityEngine;
-using UnityEngine.TextCore.Text;
-
 namespace Raydevs.ScriptableObjects
 {
+    using UnityEngine;
+
     [CreateAssetMenu(fileName = "DamageText", menuName = "Scriptable Objects/DamageText", order = 0)]
     public class DamageTextSO : ScriptableObject
     {

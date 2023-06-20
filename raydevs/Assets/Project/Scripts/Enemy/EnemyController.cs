@@ -1,4 +1,3 @@
-using System;
 using Raydevs.Utils;
 using Raydevs.VFX;
 
@@ -57,14 +56,14 @@ namespace Raydevs.Enemy
                 origin: transform.position,
                 direction: new Vector2(x: Direction, y: 0),
                 distance: EnemyStats.AttackRange,
-                layerMask: LayerMask.GetMask("Ray"));
+                layerMask: _playerLayerMask);
 
         public bool RayDetectedCollider =>
             Physics2D.Raycast(
                 origin: transform.position,
                 direction: new Vector2(x: Direction, y: 0),
                 distance: EnemyStats.AlertDistance,
-                layerMask: LayerMask.GetMask("Ray"));
+                layerMask: _playerLayerMask);
 
         private void Awake()
         {
@@ -192,8 +191,7 @@ namespace Raydevs.Enemy
 
             DamageInfo damageInfo = new DamageInfo(EnemyStats.AttackDamage, knockbackForce: EnemyStats.KnockbackForce);
 
-            // TODO: Ray add scriptable objects for damage and knockback
-            HandlePlayerMeleeImpact(damageable, damageInfo, true);
+            HandlePlayerMeleeImpact(damageable, damageInfo, false);
         }
 
 
@@ -204,7 +202,6 @@ namespace Raydevs.Enemy
             if (player == null) return;
             if (!player.TryGetComponent(out IDamageable damageable)) return;
 
-            // TODO: Ray add scriptable objects for damage and knockback
 
             DamageInfo damageInfo = new DamageInfo(EnemyStats.AttackDamage, knockbackForce: EnemyStats.KnockbackForce);
             HandlePlayerMeleeImpact(damageable, damageInfo, true);

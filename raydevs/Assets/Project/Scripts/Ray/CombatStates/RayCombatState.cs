@@ -22,7 +22,7 @@ namespace Raydevs.Ray.CombatStates
 
         public override void CheckSwitchState()
         {
-            if (ctx.CombatManager.RayGotHit)
+            if (ctx.HealthManager.RayGotHit)
                 SwitchState(state.GotHit());
             else if (ctx.CombatManager.IsSudoAttackPerformed)
                 SwitchState(state.SudoAttack());

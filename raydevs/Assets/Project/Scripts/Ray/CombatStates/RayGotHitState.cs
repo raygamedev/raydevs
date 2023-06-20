@@ -27,9 +27,15 @@ namespace Raydevs.Ray.CombatStates
 
         public override void EnterState(RayStateMachine currentContext, RayStateFactory stateFactory)
         {
-            ctx.CombatManager.IsDamageable = false;
-            ctx.RayAnimator.Play("GotHit");
+            ctx.HealthManager.IsDamageable = false;
             ApplyKnockback();
+            if (ctx.HealthManager.RayCurrentHealth <= 0)
+            {
+                SwitchState(state.Deado());
+                return;
+            }
+
+            ctx.RayAnimator.Play("GotHit");
             ctx.StartCoroutine(FreezeMovement());
             ctx.StartCoroutine(ChangeColor());
         }
@@ -41,7 +47,7 @@ namespace Raydevs.Ray.CombatStates
 
         public override void ExitState(RayStateMachine currentContext, RayStateFactory stateFactory)
         {
-            ctx.CombatManager.RayGotHit = false;
+            ctx.HealthManager.RayGotHit = false;
         }
 
         public override void CheckSwitchState()
@@ -68,7 +74,7 @@ namespace Raydevs.Ray.CombatStates
                 yield return ctx.StartCoroutine(LerpColor(_flashColor, _originalColor));
             }
 
-            ctx.CombatManager.IsDamageable = true;
+            ctx.HealthManager.IsDamageable = true;
         }
 
         private IEnumerator LerpColor(Color startColor, Color endColor)
