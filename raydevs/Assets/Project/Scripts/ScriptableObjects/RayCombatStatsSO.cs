@@ -16,14 +16,14 @@ namespace Raydevs.ScriptableObjects
         [field: SerializeField] public float AttackTimer { get; private set; }
         [field: SerializeField] public float BattleStanceTimer { get; private set; }
 
-        [field: Header("LightAttack Stats")]
+        [field: Header("Sword Stats")]
         [field: SerializeField]
         public int LightAttackDamage { get; set; }
 
         [field: SerializeField] public int MaxSwordDamage { get; private set; }
         [field: SerializeField] public float SwordAttackRange { get; private set; }
         [field: SerializeField] public Vector2 SwordAttackKnockbackForce { get; private set; }
-
+        [field: SerializeField] public float OnSwingMoveForce { get; private set; }
         [field: SerializeField] public float PunchAttackRange { get; private set; }
 
         [field: Header("Sudo Hammer Stats")]

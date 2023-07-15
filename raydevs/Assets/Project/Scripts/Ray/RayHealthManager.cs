@@ -7,7 +7,7 @@ namespace Raydevs.Ray
 {
     public class RayHealthManager : MonoBehaviour, IDamageable
     {
-        [Header("Events")] [SerializeField] private UnityEvent<int> RayGotHitEvent;
+        [Header("Events")] [SerializeField] private UnityEvent<int> RayHealthEvent;
         [SerializeField] private UnityEvent<int> SetMaxHealthEvent;
         [field: SerializeField] public RayCombatStatsSO CombatStats { get; private set; }
         public Transform ObjectTransform => transform;
@@ -27,7 +27,15 @@ namespace Raydevs.Ray
         {
             RayGotHit = true;
             RayCurrentHealth -= damageInfo.DamageAmount;
-            RayGotHitEvent.Invoke(RayCurrentHealth);
+            RayHealthEvent.Invoke(RayCurrentHealth);
+        }
+
+        public void ReplenishHealth(int healthAmount)
+        {
+            RayCurrentHealth += healthAmount;
+            if (RayCurrentHealth > CombatStats.MaxHealth)
+                RayCurrentHealth = CombatStats.MaxHealth;
+            RayHealthEvent.Invoke(RayCurrentHealth);
         }
     }
 }

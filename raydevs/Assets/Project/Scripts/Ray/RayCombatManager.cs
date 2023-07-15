@@ -172,9 +172,9 @@ namespace Raydevs.Ray
         private Vector2 GetMoveDirection() => ObjectTransform.localScale.x > 0 ? Vector2.right : Vector2.left;
 
 
-        public void OnMoveForward(float force)
+        public void OnMoveForward()
         {
-            Rigidbody.AddForce(GetMoveDirection() * force, ForceMode2D.Impulse);
+            Rigidbody.AddForce(GetMoveDirection() * CombatStats.OnSwingMoveForce, ForceMode2D.Impulse);
         }
 
         public void OnSudoAttackMiniJumpFrameEvent(float force)
