@@ -6,19 +6,25 @@ namespace Raydevs.Interfaces
     {
         public int DamageAmount;
         public int AttackDirection;
-        public float Knockback;
+        public Vector2 KnockbackForce;
+        public bool IsCritical;
 
-        public DamageInfo(int damageAmount, int attackDirection, float knockback = 0)
+        public DamageInfo(
+            int damageAmount,
+            int attackDirection = 0,
+            Vector2 knockbackForce = default,
+            bool isCritical = false)
         {
             DamageAmount = damageAmount;
             AttackDirection = attackDirection;
-            Knockback = knockback;
+            KnockbackForce = knockbackForce;
+            IsCritical = isCritical;
         }
     }
 
     public interface IDamageable
     {
-        Transform ObjectTransform { get; set; }
+        Transform ObjectTransform { get; }
         bool IsDamageable { get; set; }
         void TakeDamage(DamageInfo damageInfo);
     }

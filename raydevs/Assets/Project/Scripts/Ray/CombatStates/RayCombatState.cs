@@ -1,8 +1,9 @@
 namespace Raydevs.Ray.CombatStates
 {
-    public class RayCombatState: RayBaseState
+    public class RayCombatState : RayBaseState
     {
-        public RayCombatState(RayStateMachine currentContext, RayStateFactory stateFactory) : base(currentContext, stateFactory)
+        public RayCombatState(RayStateMachine currentContext, RayStateFactory stateFactory) : base(currentContext,
+            stateFactory)
         {
         }
 
@@ -21,15 +22,17 @@ namespace Raydevs.Ray.CombatStates
 
         public override void CheckSwitchState()
         {
-             if (ctx.CombatManager.IsSudoAttackPerformed)
+            if (ctx.HealthManager.RayGotHit)
+                SwitchState(state.GotHit());
+            else if (ctx.CombatManager.IsSudoAttackPerformed)
                 SwitchState(state.SudoAttack());
-             else if (ctx.CombatManager.IsReactAttackPerformed)
+            else if (ctx.CombatManager.IsReactAttackPerformed)
                 SwitchState(state.ReactAttack());
-             else if(ctx.CombatManager.ComboFinished)
-                 SwitchState(state.Grounded());
-             else if(ctx.CombatManager.IsLightAttackPerformed)
-                 SwitchState(state.LightAttackOne());
-             else SwitchState(state.Grounded());
+            else if (ctx.CombatManager.ComboFinished)
+                SwitchState(state.Grounded());
+            else if (ctx.CombatManager.IsLightAttackPerformed)
+                SwitchState(state.LightAttackOne());
+            else SwitchState(state.Grounded());
         }
     }
 }

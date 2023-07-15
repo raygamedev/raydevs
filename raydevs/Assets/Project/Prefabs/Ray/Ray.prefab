@@ -42,6 +42,7 @@ GameObject:
   - component: {fileID: 1592565834158962430}
   - component: {fileID: 3202208808158419872}
   - component: {fileID: 7594184412488446233}
+  - component: {fileID: 2302701683548501251}
   - component: {fileID: 7046419015363725952}
   - component: {fileID: 5235619567238925784}
   - component: {fileID: 6061048741181550318}
@@ -89,6 +90,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d29a172b02f843f38298ec0b1fe9962e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  <MovementStats>k__BackingField: {fileID: 11400000, guid: 40b1c89704fd048b885047d98b82ce4c, type: 2}
 --- !u!114 &7594184412488446233
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -101,31 +103,60 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e9343b38bdc04639b2bc58ae11906b8a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _hasSword: 1
-  _hasSudoHammer: 1
-  _hasReactThrowable: 1
-  LightAttackDamage: 35
-  SudoAttackDamage: 0
-  SudoAttackKnockbackForce: 0
-  SudoAttackBoxSize: {x: 0.99, y: 2.68}
-  SwordAttackRange: 0.66
-  SudoAttackRange: 1
-  PunchAttackRange: 0.29
-  SudoAttackJumpForce: 1400
-  CriticalHitChance: 0.2
+  <CombatStats>k__BackingField: {fileID: 11400000, guid: cda367f6d238f4d3ea439cc31ff58d1a, type: 2}
   SwordAttackPoint: {fileID: 3012180934977155370}
   PunchAttackPoint: {fileID: 2207617228434958522}
-  SudoAttackPoint: {fileID: 5507683384889253213}
   SudoAttackGroundPoint: {fileID: 7310206885526962992}
-  SudoAttackEnemyPoint: {fileID: 9072184523758905805}
-  sudoHammerGroundImpact: {fileID: 4192835255103215395, guid: 1a4252612bd4943bfab1fc790c1f786a, type: 3}
+  sudoHammerGroundImpactPrefab: {fileID: 4192835255103215395, guid: 1a4252612bd4943bfab1fc790c1f786a, type: 3}
   _enemyLayer:
     serializedVersion: 2
     m_Bits: 128
   _groundLayer:
     serializedVersion: 2
     m_Bits: 64
-  shouldEnterCombatState: 0
+--- !u!114 &2302701683548501251
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1592565834158962304}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0f6a5bdbb42d4877bfcae0fe17296c64, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  RayGotHitEvent:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 0}
+        m_TargetAssemblyTypeName: Raydevs.UI.PlayerUI.HealthbarManager, Raydevs
+        m_MethodName: SetHealth
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  SetMaxHealthEvent:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 0}
+        m_TargetAssemblyTypeName: Raydevs.UI.PlayerUI.HealthbarManager, Raydevs
+        m_MethodName: SetMaxHealth
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  <CombatStats>k__BackingField: {fileID: 11400000, guid: cda367f6d238f4d3ea439cc31ff58d1a, type: 2}
 --- !u!114 &7046419015363725952
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -151,10 +182,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc111ab171ab4e23adb6b6e85b74bfd8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MovementManager: {fileID: 3202208808158419872}
-  CombatManager: {fileID: 7594184412488446233}
-  InteractManager: {fileID: 7046419015363725952}
-  RayAnimator: {fileID: 1592565834158962431}
+  <MovementManager>k__BackingField: {fileID: 3202208808158419872}
+  <CombatManager>k__BackingField: {fileID: 7594184412488446233}
+  <HealthManager>k__BackingField: {fileID: 2302701683548501251}
+  <InteractManager>k__BackingField: {fileID: 7046419015363725952}
+  <RayAnimator>k__BackingField: {fileID: 1592565834158962431}
+  <CinemachineVirtualCamera>k__BackingField: {fileID: 0}
   CurrentStateName: 
 --- !u!114 &6061048741181550318
 MonoBehaviour:
@@ -169,8 +202,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemyImpactVFX: {fileID: 7887563744919019096, guid: d9e4f52c301bb4cb6994bef63de85f7d, type: 3}
-  damageTextVFX: {fileID: 9189677441209755910, guid: acbe72b652d31419a83718e87dd3a3b7, type: 3}
-  criticalDamageTextVFX: {fileID: 8517536399420589249, guid: 5404b4237028247758eeb30fc55c02d5, type: 3}
+  damageTextVFX: {fileID: 3716838217396533459, guid: 87c466f6aaf944df9ae9500cf4743104, type: 3}
+  criticalDamageTextVFX: {fileID: 3716838217396533459, guid: acbe72b652d31419a83718e87dd3a3b7, type: 3}
 --- !u!95 &1592565834158962431
 Animator:
   serializedVersion: 5
@@ -376,7 +409,7 @@ CapsuleCollider2D:
     m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 439
   m_LayerOverridePriority: 0
   m_ForceSendLayers:
     serializedVersion: 2

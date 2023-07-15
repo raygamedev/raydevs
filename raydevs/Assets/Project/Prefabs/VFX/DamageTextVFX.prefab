@@ -32,7 +32,7 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 9
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -51,12 +51,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8adfd4ea87154e6aa06b602cc3e0a723, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _textMeshPro: {fileID: 2464753633538803584}
-  destroyTime: 1
-  fadeTime: 0.5
-  moveSpeed: 0.3
-  spawnOffset: {x: 0.5, y: 1}
-  moveDirection: {x: 1, y: 1}
+  <DamageTextSo>k__BackingField: {fileID: 11400000, guid: bbea21e531e464a479fbb4a3df0274aa, type: 2}
 --- !u!23 &8608114289121325299
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -128,13 +123,13 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4283215615
-  m_fontColor: {r: 1, g: 0.681218, b: 0.2980392, a: 1}
+    rgba: 4280525311
+  m_fontColor: {r: 1, g: 0.63053, b: 0.13679248, a: 1}
   m_enableVertexGradient: 1
   m_colorMode: 3
   m_fontColorGradient:
-    topLeft: {r: 1, g: 0.05098039, b: 0.16576497, a: 1}
-    topRight: {r: 1, g: 1, b: 1, a: 1}
+    topLeft: {r: 0.9339623, g: 0.37218547, b: 0, a: 1}
+    topRight: {r: 1, g: 0, b: 0.26311302, a: 1}
     bottomLeft: {r: 1, g: 1, b: 1, a: 1}
     bottomRight: {r: 1, g: 1, b: 1, a: 1}
   m_fontColorGradientPreset: {fileID: 0}
@@ -146,8 +141,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 5.61
-  m_fontSizeBase: 5.61
+  m_fontSize: 6.43
+  m_fontSizeBase: 6.43
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18

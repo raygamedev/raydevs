@@ -1,7 +1,7 @@
-
 namespace Raydevs.Ray.MovementStates
 {
     using UnityEngine;
+
     public class RayJumpState : RayBaseState
     {
         private bool _isAirborneAnimationPlayed;
@@ -35,31 +35,19 @@ namespace Raydevs.Ray.MovementStates
             if (ctx.MovementManager.IsGrounded)
                 SwitchState(state.Grounded());
             else if (ctx.CombatManager.IsSudoAttackPerformed)
-            {
                 SwitchState(state.AirborneSudoAttack());
-            }
             else if (ctx.MovementManager.IsFalling)
                 SwitchState(state.Fall());
         }
 
         private void HandleJump()
         {
-            // if (ctx.MovementManager.IsAboutToHitGround && ctx.MovementManager.IsFalling)
-            //     ctx.RayAnimator.SetFloat(JumpState, 3);
-            // else if (ctx.MovementManager.IsAboutToHitGround)
-            //     ctx.RayAnimator.SetFloat(JumpState, ctx.MovementManager ? 2 : 1);
-            if (ctx.MovementManager.IsGrounded)
-            {
-                ctx.MovementManager.IsGrounded = false;
-                ctx.MovementManager.Rigidbody.AddForce(Vector2.up * 2000, ForceMode2D.Force);
-                ctx.RayAnimator.Play("jumpStart");
-            }
-            // ctx.RayAnimator.SetBool(Jump, true);
+            if (!ctx.MovementManager.IsGrounded) return;
+
+            ctx.MovementManager.IsGrounded = false;
+            ctx.MovementManager.Rigidbody.AddForce(Vector2.up * ctx.MovementManager.MovementStats.JumpForce,
+                ForceMode2D.Force);
+            ctx.RayAnimator.Play("jumpStart");
         }
     }
 }
-// if (IsFalling && IsGrounded)
-// {
-//     ctx.Animator.SetFloat(JumpState, 4);
-//     StartCoroutine(DelayAction(1f));
-// }

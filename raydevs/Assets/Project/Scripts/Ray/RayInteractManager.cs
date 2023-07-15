@@ -1,16 +1,16 @@
-
 namespace Raydevs.Ray
 {
     using UnityEngine;
     using UnityEngine.InputSystem;
-    public class RayInteractManager: MonoBehaviour, ICollectable
+
+    public class RayInteractManager : MonoBehaviour, ICollectable
     {
         [SerializeField] private GameObject _interactButton;
         private GameObject _existingInteractButton;
         private GameObject _interactable;
         private RayInput _input;
-        private bool _isInteractionAvailable = false;
-        private bool _isMsgBoxOpen = false;
+        private bool _isInteractionAvailable;
+        private bool _isMsgBoxOpen;
         public bool IsInteracting { get; set; }
         public bool IsInteractEnabled { get; set; }
 
@@ -23,43 +23,45 @@ namespace Raydevs.Ray
         //     if(IsInteractEnabled)
         //         IsInteracting = true;
         // }
-        
+
         private void OnInteract(InputAction.CallbackContext ctx)
         {
             if (!_isInteractionAvailable)
             {
                 return;
             }
+
             if (_isMsgBoxOpen)
             {
                 return;
             }
+
             // Open msg box
             InteractableHandler();
-            
         }
 
         private void InteractableHandler()
         {
-            Interactable _interactableScript = _interactable.GetComponent<Interactable>();
-            if(_interactableScript.IsCollectable)
+            InteractableBase _interactableScript = _interactable.GetComponent<InteractableBase>();
+            if (_interactableScript.IsCollectable)
                 _interactableScript.Interact(gameObject);
-            
+
             else if (_interactableScript.HasMessageBox)
             {
                 _isMsgBoxOpen = true;
                 _interactableScript.Interact();
             }
+
             Destroy(_existingInteractButton);
         }
-        
+
         private void CloseMsgBox()
         {
             _isMsgBoxOpen = false;
-            Interactable _interactableScript = _interactable.GetComponent<Interactable>();
+            InteractableBase _interactableScript = _interactable.GetComponent<InteractableBase>();
             _interactableScript.OnInteractLeave();
         }
-        
+
         private void OnTriggerEnter2D(Collider2D col)
         {
             if (_existingInteractButton != null || !col.CompareTag(tag: $"Interactable")) return;
@@ -71,14 +73,15 @@ namespace Raydevs.Ray
                 rotation: Quaternion.identity,
                 parent: transform);
         }
-        
-        
+
+
         private void OnTriggerExit2D(Collider2D other)
         {
             if (_interactable != null)
             {
                 CloseMsgBox();
-            };
+            }
+
             if (_existingInteractButton == null) return;
             Destroy(_existingInteractButton);
             _isInteractionAvailable = false;

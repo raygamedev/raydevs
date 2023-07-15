@@ -1,34 +1,51 @@
+using Raydevs.Utils;
+using Raydevs.VFX;
+
 namespace Raydevs.Enemy
 {
+    using ScriptableObjects;
     using Interfaces;
     using System.Collections;
     using UnityEngine;
 
     public class EnemyController : MonoBehaviour, IDamageable
     {
-        [field: SerializeField] public float AlertDistance { get; private set; } = 3f;
-        [field: SerializeField] public float AttackDistance { get; private set; } = 1f;
-        [field: SerializeField] public int MaxHealth { get; private set; } = 100;
-        [field: SerializeField] public float HitForce { get; private set; } = 5f;
+        [field: Header("Scriptable Objects")]
+        [field: SerializeField]
+        public EnemySO EnemyStats { get; private set; }
+
+        [Header("Prefabs")] [SerializeField] private Transform EnemyAttackPoint;
+        [SerializeField] private float EnemyAttackRadius;
         [field: SerializeField] public float HitForceUp { get; private set; } = 5f;
         [field: SerializeField] public float EnemyStunTime { get; private set; } = 0.5f;
 
-        public Transform ObjectTransform { get; set; }
-        public bool IsDamageable { get; set; } = true;
+        public Transform ObjectTransform => transform;
+
+        public bool IsDamageable
+        {
+            get => !IsDead;
+            set => IsDead = !value;
+        }
 
         public Rigidbody2D Rigidbody { get; private set; }
 
-        public Animator animator;
+        public Animator animator { get; private set; }
         public string CurrentStateName;
 
         private EnemyHealthBar _enemyHealthBar;
+        private LayerMask _playerLayerMask;
         private EnemyStateFactory _states;
         private Coroutine _stunCoroutine;
         private int _currentHealth;
 
+        private GameObject _impactVFXPrefab;
+        private ImpactVFX _impactVFXScript;
+
+        private DamageText _damageTextScript;
+
         public EnemyBaseState CurrentState { get; set; }
         public int Direction { get; set; }
-        public float MoveSpeed { get; set; } = 50f;
+        public float CurrentMoveSpeed { get; set; }
         public bool IsRunning { get; set; }
         public bool EnemyTookDamage { get; set; }
         public bool IsAbleToMove { get; set; } = true;
@@ -38,26 +55,35 @@ namespace Raydevs.Enemy
             Physics2D.Raycast(
                 origin: transform.position,
                 direction: new Vector2(x: Direction, y: 0),
-                distance: AttackDistance,
-                layerMask: LayerMask.GetMask("Ray"));
+                distance: EnemyStats.AttackRange,
+                layerMask: _playerLayerMask);
 
         public bool RayDetectedCollider =>
             Physics2D.Raycast(
                 origin: transform.position,
                 direction: new Vector2(x: Direction, y: 0),
-                distance: AlertDistance,
-                layerMask: LayerMask.GetMask("Ray"));
-
+                distance: EnemyStats.AlertDistance,
+                layerMask: _playerLayerMask);
 
         private void Awake()
         {
-            _currentHealth = MaxHealth;
+            (_impactVFXPrefab, _impactVFXScript) =
+                GameObjectUtils.InstantiateAndGetComponent<ImpactVFX>(prefab: EnemyStats.ImpactVFX, parent: transform);
+            (_, _damageTextScript) = GameObjectUtils.InstantiateAndGetComponent<DamageText>(
+                prefab: Resources.Load<GameObject>("EnemyDamageTextVFX"));
+            _impactVFXPrefab.SetActive(false);
+        }
+
+
+        private void Start()
+        {
+            _currentHealth = EnemyStats.MaxHealth;
+            _playerLayerMask = LayerMask.GetMask("Ray");
             _enemyHealthBar = GetComponentInChildren<EnemyHealthBar>();
             Rigidbody = GetComponent<Rigidbody2D>();
             animator = GetComponent<Animator>();
-            ObjectTransform = transform;
 
-            Direction = transform.localScale.x > 0 ? 1 : -1;
+            Direction = ObjectTransform.localScale.x > 0 ? 1 : -1;
             _states = new EnemyStateFactory(this);
             CurrentState = _states.Patrol();
             CurrentState.EnterState(this, _states);
@@ -74,29 +100,30 @@ namespace Raydevs.Enemy
         {
             if (IsRunning && IsAbleToMove)
                 Rigidbody.velocity =
-                    new Vector2(Direction * MoveSpeed * Time.deltaTime, Rigidbody.velocity.y);
+                    new Vector2(Direction * CurrentMoveSpeed * Time.deltaTime, Rigidbody.velocity.y);
         }
 
         public void Flip()
         {
             Direction *= -1;
-            transform.localScale = new Vector3(
+            ObjectTransform.localScale = new Vector3(
                 x: Direction,
-                y: transform.localScale.y,
-                z: transform.localScale.z);
+                y: ObjectTransform.localScale.y,
+                z: ObjectTransform.localScale.z);
         }
 
-        private float CalculateCurrentHealthPercentage() => (float)_currentHealth / MaxHealth;
+        private float CalculateCurrentHealthPercentage() => (float)_currentHealth / EnemyStats.MaxHealth;
 
         private void FlipEnemyTowardsAttack(int attackDirection)
         {
             Direction = attackDirection;
-            transform.localScale = new Vector3(attackDirection, transform.localScale.y, transform.localScale.z);
+            ObjectTransform.localScale =
+                new Vector3(attackDirection, ObjectTransform.localScale.y, ObjectTransform.localScale.z);
         }
 
-        private void KnockBack(float knockback)
+        private void KnockBackEnemy(Vector2 knockbackForce)
         {
-            Rigidbody.AddForce(new Vector2(x: Direction * knockback, y: HitForceUp), ForceMode2D.Impulse);
+            Rigidbody.AddForce(new Vector2(-1 * Direction * knockbackForce.x, knockbackForce.y), ForceMode2D.Impulse);
         }
 
 
@@ -131,7 +158,7 @@ namespace Raydevs.Enemy
             if (_currentHealth <= 0)
                 HandleDeath();
             else
-                KnockBack(damageInfo.Knockback);
+                KnockBackEnemy(damageInfo.KnockbackForce);
         }
 
 
@@ -143,12 +170,47 @@ namespace Raydevs.Enemy
             IsAbleToMove = true;
         }
 
-        private void OnCollisionEnter2D(Collision2D col)
+        public void HandlePlayerMeleeImpact(
+            IDamageable player,
+            DamageInfo damageInfo,
+            bool isUseImpactVFX)
         {
-            if (IsDead && col.gameObject.CompareTag("Player"))
-            {
-                Physics2D.IgnoreCollision(col.collider, GetComponent<Collider2D>());
-            }
+            if (player.IsDamageable == false) return;
+            player.TakeDamage(damageInfo);
+            if (isUseImpactVFX)
+                _impactVFXScript.PlayImpactVFX(player.ObjectTransform.position);
+            _damageTextScript.PlayDamageText(damageInfo.DamageAmount, player.ObjectTransform.position);
+        }
+
+        private void OnTriggerEnter2D(Collider2D player)
+        {
+            // Enemy collider is set to include only the Ray layer,
+            // hence no need to check which layer the other collider is on
+            if (IsDead) return;
+            if (!player.TryGetComponent(out IDamageable damageable)) return;
+
+            DamageInfo damageInfo = new DamageInfo(EnemyStats.AttackDamage, knockbackForce: EnemyStats.KnockbackForce);
+
+            HandlePlayerMeleeImpact(damageable, damageInfo, false);
+        }
+
+
+        public void EnemyAttackFrameEvent()
+        {
+            Collider2D player =
+                Physics2D.OverlapCircle(EnemyAttackPoint.position, EnemyAttackRadius, _playerLayerMask);
+            if (player == null) return;
+            if (!player.TryGetComponent(out IDamageable damageable)) return;
+
+
+            DamageInfo damageInfo = new DamageInfo(EnemyStats.AttackDamage, knockbackForce: EnemyStats.KnockbackForce);
+            HandlePlayerMeleeImpact(damageable, damageInfo, true);
+        }
+
+        private void OnDrawGizmos()
+        {
+            Gizmos.color = Color.red;
+            Gizmos.DrawWireSphere(EnemyAttackPoint.position, EnemyAttackRadius);
         }
 
         public void DestroyEnemy()

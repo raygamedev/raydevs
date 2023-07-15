@@ -1,6 +1,7 @@
 namespace Raydevs.Ray
 {
     using UnityEngine;
+
     public class GroundCheck : MonoBehaviour
     {
         private RayMovementManager _rayMovementManager;
@@ -10,10 +11,13 @@ namespace Raydevs.Ray
             _rayMovementManager = GetComponentInParent<RayMovementManager>();
         }
 
+        /// <summary>
+        /// Collider is set to only collide with the ground layer.
+        /// </summary>
+        /// <param name="col"></param>
         private void OnTriggerStay2D(Collider2D col)
         {
-            if (col.gameObject.CompareTag($"Ground"))
-                _rayMovementManager.IsGrounded = true;
+            _rayMovementManager.IsGrounded = true;
         }
     }
 }

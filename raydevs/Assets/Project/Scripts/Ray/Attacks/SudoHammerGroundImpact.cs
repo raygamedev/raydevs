@@ -1,40 +1,75 @@
-using System;
-using System.Collections.Generic;
-using Raydevs.Interfaces;
-using UnityEngine;
-
 namespace Raydevs.Ray.Attacks
 {
+    using System.Collections.Generic;
+    using Interfaces;
+    using UnityEngine;
+
     public class SudoHammerGroundImpact : MonoBehaviour
     {
-        [Header("Stats")] [SerializeField] private int damage;
-        [SerializeField] private float knockback;
-        [SerializeField] private float colliderRadiusTime;
-        [SerializeField] private float maxColliderRadius;
+        private Transform RaysTransform { get; set; }
 
+        private const float ColliderRadiusTime = 0.3f;
+        private const float MaxColliderRadius = 5f;
 
-        [SerializeField] private ImpactHandler impactHandler;
-        [SerializeField] private CircleCollider2D circleCollider;
-        [SerializeField] private GameObject _sudoGroundImpactVFX;
-
+        private int _minDamage;
+        private int _maxDamage;
+        private Vector2 _knockbackForce;
         private float _animationTimer;
         private float _scale;
-        private HashSet<IDamageable> _enemiesHit = new HashSet<IDamageable>();
 
-        private void Start()
+        private ImpactHandler _impactHandler;
+        private CircleCollider2D _circleCollider;
+        private Animator _animator;
+        private Transform _transform;
+
+        private readonly HashSet<IDamageable> _enemiesHit = new HashSet<IDamageable>();
+
+        public void Initialize(Transform raysTransform, ImpactHandler impactHandler)
         {
-            Instantiate(_sudoGroundImpactVFX, transform.position, Quaternion.identity);
+            RaysTransform = raysTransform;
+            _impactHandler = impactHandler;
         }
+
+        private void Awake()
+        {
+            _circleCollider = GetComponent<CircleCollider2D>();
+            _animator = GetComponent<Animator>();
+            _transform = transform;
+        }
+
+        private void OnEnable()
+        {
+            _animator.Play("HammerGroundHit", 0, 0);
+        }
+
+        private void OnDisable() => ResetData();
 
 
         private void Update()
         {
             _animationTimer += Time.deltaTime;
             // Scale the collider to match the animation
-            _scale = Mathf.Min(_animationTimer / colliderRadiusTime, 1.0f);
-            circleCollider.radius = _scale * maxColliderRadius;
+            _scale = Mathf.Min(_animationTimer / ColliderRadiusTime, 1.0f);
+            _circleCollider.radius = _scale * MaxColliderRadius;
 
-            if (circleCollider.radius >= maxColliderRadius) Destroy(gameObject);
+            if (_circleCollider.radius >= MaxColliderRadius) gameObject.SetActive(false);
+        }
+
+        private void ResetData()
+        {
+            _animationTimer = 0.0f;
+            _scale = 0.0f;
+            _circleCollider.radius = 0.0f;
+            _enemiesHit.Clear();
+        }
+
+        public void OnHit(Vector3 position, int minDamage, int maxDamage, Vector2 knockbackForce)
+        {
+            _transform.position = position;
+            _minDamage = minDamage;
+            _maxDamage = maxDamage;
+            _knockbackForce = knockbackForce;
+            gameObject.SetActive(true);
         }
 
         private void OnTriggerEnter2D(Collider2D col)
@@ -42,22 +77,22 @@ namespace Raydevs.Ray.Attacks
             if (!col.TryGetComponent(out IDamageable damageable)) return;
 
             if (_enemiesHit.Contains(damageable)) return;
+            int attackDirection = CombatUtils.GetDirectionBetweenPoints(
+                RaysTransform.position,
+                damageable.ObjectTransform.position);
 
-            impactHandler.HandleEnemyImpact(
-                damageable,
-                CombatUtils.GetDirectionBetweenPoints(
-                    transform.parent.position,
-                    damageable.ObjectTransform.position),
-                damage,
-                knockback,
-                false);
+            DamageInfo damageInfo = new DamageInfo(
+                damageAmount: CombatUtils.GetRandomHitDamage(_minDamage, _maxDamage),
+                attackDirection: attackDirection,
+                knockbackForce: _knockbackForce);
+            _impactHandler.HandleEnemyImpact(damageable, damageInfo);
             _enemiesHit.Add(damageable);
         }
 
         private void OnDrawGizmos()
         {
             Gizmos.color = Color.red;
-            Gizmos.DrawWireSphere(transform.position, circleCollider.radius);
+            Gizmos.DrawWireSphere(transform.position, _circleCollider.radius);
         }
     }
 }

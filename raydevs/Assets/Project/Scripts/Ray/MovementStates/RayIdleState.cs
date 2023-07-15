@@ -1,8 +1,9 @@
 namespace Raydevs.Ray.MovementStates
 {
-    public class RayIdleState: RayBaseState
+    public class RayIdleState : RayBaseState
     {
-        public RayIdleState(RayStateMachine currentContext, RayStateFactory stateFactory) : base(currentContext, stateFactory)
+        public RayIdleState(RayStateMachine currentContext, RayStateFactory stateFactory) : base(currentContext,
+            stateFactory)
         {
         }
 
@@ -22,7 +23,7 @@ namespace Raydevs.Ray.MovementStates
 
         public override void CheckSwitchState()
         {
-            if(ctx.CombatManager.shouldEnterCombatState) 
+            if (ctx.CombatManager.ShouldEnterCombatState || ctx.HealthManager.RayGotHit)
                 SwitchState(state.Combat());
             else if (ctx.MovementManager.IsRunning)
                 SwitchState(state.Run());

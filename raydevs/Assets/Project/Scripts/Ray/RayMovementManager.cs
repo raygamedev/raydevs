@@ -1,3 +1,5 @@
+using Raydevs.ScriptableObjects;
+
 namespace Raydevs.Ray
 {
     using UnityEngine;
@@ -5,6 +7,8 @@ namespace Raydevs.Ray
 
     public class RayMovementManager : MonoBehaviour
     {
+        [field: SerializeField] public RayMovementStatsSO MovementStats { get; private set; }
+
         #region Properties
 
         public bool IsGrounded { get; set; }
@@ -14,6 +18,16 @@ namespace Raydevs.Ray
         public bool IsRunning { get; set; }
 
         public Rigidbody2D Rigidbody { get; private set; }
+        public bool IsFalling => Rigidbody.velocity.y < -0.1f;
+
+        /// <summary>
+        /// Cached transform component.
+        /// </summary>
+        private Transform _transform;
+
+        private LayerMask _groundLayerMask;
+
+        private const float RaycastGroundDistance = 1.5f;
 
         #endregion
 
@@ -23,7 +37,6 @@ namespace Raydevs.Ray
             InputManager.OnMove += OnMove;
         }
 
-        public bool IsFalling => Rigidbody.velocity.y < -0.1f;
 
         /// <summary>
         /// Returns true if the character is about to hit the ground.
@@ -31,30 +44,22 @@ namespace Raydevs.Ray
         /// <remarks>
         /// This property casts a ray downwards from the character's position to check if there is any ground within a certain distance.
         /// </remarks>
-        public bool IsAboutToHitGround
-        {
-            get
-            {
-                const float raycastDistance = 1.5f;
-                Vector2 ray = new Vector2(transform.position.x, transform.position.y - 0.5f);
-                RaycastHit2D hit = Physics2D.Raycast(ray,
-                    Vector2.down,
-                    raycastDistance,
-                    LayerMask.GetMask($"Ground"));
-                return hit.collider != null;
-            }
-        }
+        public bool IsAboutToHitGround =>
+            Physics2D.Raycast(
+                new Vector2(_transform.position.x, _transform.position.y - 0.5f),
+                Vector2.down,
+                RaycastGroundDistance,
+                _groundLayerMask);
 
         private void OnMove(InputAction.CallbackContext ctx) => MoveDir = ctx.ReadValue<float>();
 
-        private void OnJump(InputAction.CallbackContext ctx)
-        {
-            IsJumpPerformed = ctx.ReadValueAsButton();
-        }
+        private void OnJump(InputAction.CallbackContext ctx) => IsJumpPerformed = ctx.ReadValueAsButton();
 
         private void Start()
         {
             Rigidbody = GetComponent<Rigidbody2D>();
+            _groundLayerMask = LayerMask.GetMask("Ground");
+            _transform = transform;
         }
 
         private void Update()
@@ -66,7 +71,7 @@ namespace Raydevs.Ray
         private void FixedUpdate()
         {
             if (IsAbleToMove)
-                Rigidbody.velocity = new Vector2(MoveDir * 9f, Rigidbody.velocity.y);
+                Rigidbody.velocity = new Vector2(MoveDir * MovementStats.MoveSpeed, Rigidbody.velocity.y);
         }
 
         /// <summary>
@@ -76,10 +81,10 @@ namespace Raydevs.Ray
         {
             switch (MoveDir)
             {
-                case < 0 when transform.localScale.x > 0:
-                case > 0 when transform.localScale.x < 0:
-                    transform.localScale = new Vector3(-transform.localScale.x, transform.localScale.y,
-                        transform.localScale.z);
+                case < 0 when _transform.localScale.x > 0:
+                case > 0 when _transform.localScale.x < 0:
+                    _transform.localScale = new Vector3(-_transform.localScale.x, _transform.localScale.y,
+                        _transform.localScale.z);
                     break;
             }
         }
