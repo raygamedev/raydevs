@@ -1,3 +1,5 @@
+using System;
+
 namespace Raydevs.Ray
 {
     using Attacks;
@@ -44,9 +46,9 @@ namespace Raydevs.Ray
         public Transform ObjectTransform => transform;
 
 
-        public bool HasSword { get; set; } = true;
-        public bool HasSudoHammer { get; set; } = true;
-        public bool HasReactThrowable { get; set; } = true;
+        public bool HasSword { get; set; }
+        public bool HasSudoHammer { get; set; }
+        public bool HasReactThrowable { get; set; }
 
         public bool IsLightAttackPerformed { get; set; }
         public bool IsSudoAttackPerformed { get; set; }
@@ -65,6 +67,24 @@ namespace Raydevs.Ray
         public Rigidbody2D Rigidbody { get; private set; }
 
         private SudoHammerGroundImpact _sudoHammerGroundImpactScript;
+
+        public void SetCollectedItem(CollectableType collectableType)
+        {
+            switch (collectableType)
+            {
+                case CollectableType.PythonSword:
+                    HasSword = true;
+                    break;
+                case CollectableType.SudoHammer:
+                    HasSudoHammer = true;
+                    break;
+                case CollectableType.ReactThrowingStar:
+                    HasReactThrowable = true;
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(collectableType), collectableType, null);
+            }
+        }
 
         private void OnEnable()
         {
