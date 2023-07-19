@@ -1,26 +1,21 @@
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Raydevs
 {
     public class Collectable : InteractableBase
     {
+        [SerializeField] private UnityEvent<CollectableType> OnCollectableInteracted;
         [SerializeField] private CollectableType _collectableType;
 
-        private Collectable()
+        public override void OnInteractEnter()
         {
-            IsCollectable = true;
+            OnCollectableInteracted.Invoke(_collectableType);
+            Destroy(gameObject);
         }
 
-        public override void Interact(GameObject ray)
+        public override void OnInteractExit()
         {
-            base.Interact();
-            ICollectable collectable = ray.GetComponent<ICollectable>();
-            if (collectable != null)
-                collectable.SetCollectableInteracted(_collectableType);
-            else
-                Debug.LogError("No ICollectable component found on SwordCollectable");
-
-            Destroy(gameObject);
         }
     }
 }

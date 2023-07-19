@@ -21,7 +21,8 @@ MonoBehaviour:
   <LightAttackDamage>k__BackingField: 30
   <MaxSwordDamage>k__BackingField: 100
   <SwordAttackRange>k__BackingField: 1
-  <SwordAttackKnockbackForce>k__BackingField: {x: 10, y: 3}
+  <SwordAttackKnockbackForce>k__BackingField: {x: 36.4, y: 3}
+  <OnSwingMoveForce>k__BackingField: 8
   <PunchAttackRange>k__BackingField: 0.43
   <SudoAttackDamage>k__BackingField: 30
   <MaxSudoHammerDamage>k__BackingField: 100

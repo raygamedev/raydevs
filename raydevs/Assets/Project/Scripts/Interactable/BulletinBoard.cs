@@ -1,24 +1,16 @@
+using System;
+using UnityEngine.Events;
+
 namespace Raydevs
 {
     using UnityEngine;
 
     public class BulletinBoard : InteractableBase
     {
-        private BulletinBoard()
-        {
-            HasMessageBox = true;
-        }
-
         [SerializeField] private bool _hasNewQuest = true;
+        [SerializeField] private GameObject _questionMark;
+        [SerializeField] private GameObject _msgBox;
 
-        private GameObject _questionMark;
-        private GameObject _msgBox;
-
-        private void Awake()
-        {
-            _questionMark = transform.Find("QuestionMark").gameObject;
-            _msgBox = transform.Find("MessageBox").gameObject;
-        }
 
         private void Update()
         {
@@ -26,18 +18,17 @@ namespace Raydevs
                 _questionMark.SetActive(_hasNewQuest);
         }
 
-        public override void Interact()
+        public override void OnInteractEnter()
         {
-            base.Interact();
+            Debug.Log("Interacted with bulletin board");
             _msgBox.SetActive(true);
             if (!_hasNewQuest) return;
             _hasNewQuest = false;
             _questionMark.SetActive(false);
         }
 
-        public override void OnInteractLeave()
+        public override void OnInteractExit()
         {
-            base.OnInteractLeave();
             _msgBox.SetActive(false);
         }
     }

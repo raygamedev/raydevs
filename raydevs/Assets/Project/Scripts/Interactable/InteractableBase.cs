@@ -1,24 +1,11 @@
-using System;
-
 namespace Raydevs
 {
     using UnityEngine;
 
-    public class InteractableBase : MonoBehaviour
+    public abstract class InteractableBase : MonoBehaviour
     {
-        public bool IsCollectable { get; set; }
-        public bool HasMessageBox { get; set; }
+        public abstract void OnInteractEnter();
 
-        public virtual void Interact()
-        {
-        }
-
-        public virtual void Interact(GameObject ray)
-        {
-        }
-
-        public virtual void OnInteractLeave()
-        {
-        }
+        public abstract void OnInteractExit();
     }
 }
