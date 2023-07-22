@@ -17,6 +17,7 @@ export const RaydevsGame = ({
     codeUrl: 'build/WebGL.wasm',
   });
 
+  // some commit
   useEffect(() => setIsGameLoaded(isLoaded), [setIsGameLoaded, isLoaded]);
   return (
     <motion.div
