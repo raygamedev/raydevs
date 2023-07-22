@@ -20,7 +20,7 @@ RUN npm run build
 
 
 # Combine the React app and Rust server into the final image
-FROM debian:buster-slim
+FROM debian:11-slim
 RUN apt-get update && apt-get install -y libssl-dev ca-certificates && rm -rf /var/lib/apt/lists/*
 COPY --from=react-build /app/build /app/build
 COPY --from=rust-build /usr/local/cargo/bin/server /app/server

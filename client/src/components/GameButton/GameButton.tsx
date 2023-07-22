@@ -9,6 +9,7 @@ import {
 } from '@mantine/core';
 import { IconPlayerPause, IconPlayerPlay } from '@tabler/icons-react';
 import useIsMobile from '../../hooks/useIsMobile';
+import { useEffect } from 'react';
 
 const BUTTON_WIDTH = 300;
 
@@ -48,6 +49,17 @@ interface GameButtonProps {
 }
 
 const GameButton = ({ isPlaying, onClick, isLoaded }: GameButtonProps) => {
+  useEffect(() => {
+    // prevent default on space keyboard event
+    document.addEventListener('keydown', function (e) {
+      e.preventDefault();
+    });
+    return () => {
+      document.removeEventListener('keydown', function (e) {
+        e.preventDefault();
+      });
+    };
+  }, []);
   const isMobile = useIsMobile();
   const { classes } = useStyles();
   if (isMobile) {
