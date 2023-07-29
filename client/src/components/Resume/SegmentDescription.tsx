@@ -48,7 +48,7 @@ interface SegmentDescriptionProps {
 
 export const SegmentDescription = ({
   segmentDescriptionList,
-  isMobile
+  isMobile,
 }: SegmentDescriptionProps) => {
   const { classes } = useStyles();
   return isMobile ? (
@@ -87,40 +87,42 @@ export const SegmentDescription = ({
       padding="lg"
       radius={30}
       withBorder>
-      {segmentDescriptionList.map((item: SegmentDescriptionData) => (
-        <>
-          <Group position="left" mt="md" mb="xs">
-            {Array.isArray(item.badge) ? (
-              item.badge.map((badge) => (
-                <Badge key={badge} size="lg" color="violet" variant="light">
-                  {badge}
+      {segmentDescriptionList.map(
+        (item: SegmentDescriptionData, index: number) => (
+          <div key={`segment-description-item-${index}`}>
+            <Group position="left" mt="md" mb="xs">
+              {Array.isArray(item.badge) ? (
+                item.badge.map((badge) => (
+                  <Badge key={badge} size="lg" color="violet" variant="light">
+                    {badge}
+                  </Badge>
+                ))
+              ) : (
+                <Badge size="lg" color="violet" variant="light">
+                  {item.badge}
                 </Badge>
+              )}
+            </Group>
+            {Array.isArray(item.text) ? (
+              item.text.map((text, index) => (
+                <Group noWrap key={index} position="left">
+                  <Text>•</Text>
+                  <Text size="sm" color="dimmed">
+                    {text}
+                  </Text>
+                </Group>
               ))
             ) : (
-              <Badge size="lg" color="violet" variant="light">
-                {item.badge}
-              </Badge>
-            )}
-          </Group>
-          {Array.isArray(item.text) ? (
-            item.text.map((text, index) => (
-              <Group noWrap key={index} position="left">
+              <Group noWrap position="left" mt="md" mb="xs">
                 <Text>•</Text>
                 <Text size="sm" color="dimmed">
-                  {text}
+                  {item.text}
                 </Text>
               </Group>
-            ))
-          ) : (
-            <Group noWrap position="left" mt="md" mb="xs">
-              <Text>•</Text>
-              <Text size="sm" color="dimmed">
-                {item.text}
-              </Text>
-            </Group>
-          )}
-        </>
-      ))}
+            )}
+          </div>
+        ),
+      )}
     </Card>
   );
 };

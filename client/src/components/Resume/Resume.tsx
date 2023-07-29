@@ -128,10 +128,8 @@ const useStyles = createStyles((theme) => ({
       theme.colorScheme === 'dark' ? theme.colors.dark[6] : theme.white,
     boxShadow: theme.shadows.md,
     width: '80%',
-    minHeight: 900,
     flexGrow: 1,
     borderRadius: 30,
-    gap: 20,
     flexDirection: 'column',
     justifyContent: 'space-around',
     border: `${theme.spacing.xl} solid ${
@@ -212,7 +210,9 @@ export const Resume = ({ isPlaying, setIsGameLoaded }: ResumeProps) => {
       </Box>
     </>
   ) : (
-    <Flex className={classes.root}>
+    <Flex
+      className={classes.root}
+      style={{ minHeight: isPlaying ? 'max-content' : 900 }}>
       <RaydevsGame isPlaying={isPlaying} setIsGameLoaded={setIsGameLoaded} />
       <motion.div
         animate={{
@@ -222,17 +222,21 @@ export const Resume = ({ isPlaying, setIsGameLoaded }: ResumeProps) => {
           opacity: isPlaying ? 0 : 1,
           rotate: 0,
         }}>
-        <Summary />
-        <Flex className={classes.segment}>
-          <SegmentControl
-            setActive={setActive}
-            segmentItems={extractSegmentItems(resumeData)}
-          />
-          <SegmentDescription
-            isMobile={isMobile}
-            segmentDescriptionList={resumeData[active].segmentDescription}
-          />
-        </Flex>
+        {!isPlaying && (
+          <>
+            <Summary />
+            <Flex className={classes.segment}>
+              <SegmentControl
+                setActive={setActive}
+                segmentItems={extractSegmentItems(resumeData)}
+              />
+              <SegmentDescription
+                isMobile={isMobile}
+                segmentDescriptionList={resumeData[active].segmentDescription}
+              />
+            </Flex>
+          </>
+        )}
       </motion.div>
     </Flex>
   );
