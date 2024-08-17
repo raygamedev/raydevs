@@ -1,2 +1,0 @@
-/Users/ray/raydevs/Raydevs/obj/Debug/Unity.InputSystem.TestFramework.Player.csproj.AssemblyReference.cache
-/Users/ray/raydevs/Raydevs/obj/Debug/Unity.InputSystem.TestFramework.Player.csproj.CoreCompileInputs.cache
