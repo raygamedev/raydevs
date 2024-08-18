@@ -44,6 +44,7 @@ jobs:
           UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
           UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
           UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+          GITHUB_TOKEN: ${{ secrets.GHCR_TOKEN }}
         with:
           unityVersion: 6000.0.15f1
           projectPath: raydevs
